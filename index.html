@@ -164,6 +164,7 @@
 	  // 旋转
 	  obj.rotation.x = (-90 * Math.PI) / 180;
 	  // 改颜色
+	  if (obj.isMesh) {alert(11)}
 	  obj.castShadow = true;
 	  obj.receiveShadow = true; // @ts-ignore：无法被执行的代码的错误
 	  obj.material = new THREE.MeshPhongMaterial({
