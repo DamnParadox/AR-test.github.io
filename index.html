@@ -169,13 +169,11 @@
 	// 	item.material.color.setHex(0xffffff);
 	//   })
 
-	   var material = new THREE.MeshPhongMaterial({
-		color: 0xffffff,
-		shininess: 30,
-		skinning: true,
-		opacity: 0.8,
-		transparent: true,
-		}); 
+	   var material = new THREE.MeshNormalMaterial({
+		transparent : true,
+		opacity: 0.5,
+		side: THREE.DoubleSide
+	});
 	var mesh	= new THREE.Mesh( obj, material );
 	arWorldRoot.add( mesh );
 	//   obj.castShadow = true;
