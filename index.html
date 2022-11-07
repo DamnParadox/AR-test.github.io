@@ -28,6 +28,7 @@
 		alpha: true
 	});
 	renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+
 	// renderer.setPixelRatio( 1/2 );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.domElement.style.position = 'absolute'
@@ -164,9 +165,19 @@
 	  // 旋转
 	  obj.rotation.x = (-90 * Math.PI) / 180;
 	  // 改颜色
-	  obj.children.forEach((item)=>{
-		item.material.color.setHex(0xffffff);
-	  })
+	//   obj.children.forEach((item)=>{
+	// 	item.material.color.setHex(0xffffff);
+	//   })
+
+	   var material = new THREE.MeshPhongMaterial({
+		color: 0xffffff,
+		shininess: 30,
+		skinning: true,
+		opacity: 0.8,
+		transparent: true,
+		}); 
+	var mesh	= new THREE.Mesh( obj, material );
+	arWorldRoot.add( mesh );
 	//   obj.castShadow = true;
 	//   obj.receiveShadow = true; // @ts-ignore：无法被执行的代码的错误
 	//   obj.material = new THREE.MeshPhongMaterial({
@@ -176,7 +187,7 @@
 	// 	opacity: 0.8,
 	// 	transparent: true,
 	// 	});
-	  arWorldRoot.add(obj);
+	//   arWorldRoot.add(obj);
 	})
 
 
