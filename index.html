@@ -164,16 +164,17 @@
 	  // 旋转
 	  obj.rotation.x = (-90 * Math.PI) / 180;
 	  // 改颜色
-	  if (obj.isMesh) {alert(11)}
-	  obj.castShadow = true;
-	  obj.receiveShadow = true; // @ts-ignore：无法被执行的代码的错误
-	  obj.material = new THREE.MeshPhongMaterial({
-		color: 0xffffff,
-		shininess: 30,
-		skinning: true,
-		opacity: 0.8,
-		transparent: true,
-		});
+	  if (obj.isObject3D) {alert(11)}
+	  obj.material.color.setHex(0xff9900);
+	//   obj.castShadow = true;
+	//   obj.receiveShadow = true; // @ts-ignore：无法被执行的代码的错误
+	//   obj.material = new THREE.MeshPhongMaterial({
+	// 	color: 0xffffff,
+	// 	shininess: 30,
+	// 	skinning: true,
+	// 	opacity: 0.8,
+	// 	transparent: true,
+	// 	});
 	  arWorldRoot.add(obj);
 	})
 
