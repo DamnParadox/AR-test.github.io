@@ -161,8 +161,8 @@
 	  console.log(obj);
 	  // 查看加载器生成的材质对象：MeshPhongMaterial
 	  console.log(obj.children[0].material);
-	  obj.rotation.x += 90;
-	  obj.children[0].material.color.setStyle('#ca14cb');
+	  obj.rotation.x = (90 * Math.PI) / 180;;
+	  obj.material.color.set(0xff0000);
 	  arWorldRoot.add(obj);
 	})
 
