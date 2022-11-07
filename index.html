@@ -162,7 +162,11 @@
 	  // 查看加载器生成的材质对象：MeshPhongMaterial
 	  console.log(obj.children[0].material);
 	  obj.rotation.x = (90 * Math.PI) / 180;;
-	  obj.material.color.set(0xffffff);
+	  obj.material = new THREE.MeshBasicMaterial({
+          color: "#FFFFFF",
+          transparent: true,
+          opacity: 0.7
+        });
 	  arWorldRoot.add(obj);
 	})
 
