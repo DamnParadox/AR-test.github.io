@@ -27,7 +27,7 @@
 		// antialias	: true,
 		alpha: true
 	});
-	renderer.setClearColor(new THREE.Color('lightgrey'), 0)
+	// renderer.setClearColor(new THREE.Color('lightgrey'), 0)
 	// renderer.setPixelRatio( 1/2 );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.domElement.style.position = 'absolute'
@@ -156,7 +156,7 @@
 	// 没有材质文件，系统自动设置Phong网格材质
 	loader.load('https://ued.united-imaging.com//doc_server//doc_server//arlib//pattern//123//327f22180ac046ae8d9d4d03028da111.obj',function (obj) {
 	  // 控制台查看返回结构：包含一个网格模型Mesh的组Group
-	  obj.position.set(0, 0.5, 0);
+	  obj.position.set(0, 0, 0);
 	  obj.scale.set(0.005, 0.005, 0.005);
 	  console.log(obj);
 	  // 查看加载器生成的材质对象：MeshPhongMaterial
@@ -165,25 +165,9 @@
 	  obj.rotation.x = (-90 * Math.PI) / 180;
 	  // 改颜色
 	  for(var i=0;i<3;i++){
-		obj.children[i].material.color.set(0xfff)
+		obj.children[i].material.color.set(0xffffff)
 	  }
-
-	//    var material = new THREE.MeshNormalMaterial({
-	// 	transparent : true,
-	// 	opacity: 0.5,
-	// 	side: THREE.DoubleSide
-	// });
-	// var mesh	= new THREE.Mesh( obj, material );
-	// arWorldRoot.add( mesh );
-	//   obj.castShadow = true;
-	//   obj.receiveShadow = true; // @ts-ignore：无法被执行的代码的错误
-	//   obj.material = new THREE.MeshPhongMaterial({
-	// 	color: 0xffffff,
-	// 	shininess: 30,
-	// 	skinning: true,
-	// 	opacity: 0.8,
-	// 	transparent: true,
-	// 	});
+	  
 	  arWorldRoot.add(obj);
 	})
 
@@ -212,10 +196,10 @@
 
 
     // 光
-	var ambient=new THREE.AmbientLight(0xfff);
+	var ambient=new THREE.AmbientLight(0xffffff);
     scene.add(ambient);
 
-	var directctionalLight=new THREE.DirectionalLight(0xfff);
+	var directctionalLight=new THREE.DirectionalLight(0xffffff);
     directctionalLight.position.set(1,1,1).normalize();
 	scene.add(directctionalLight);
 
