@@ -29,6 +29,12 @@
 	});
 	renderer.setClearColor(new THREE.Color('lightgrey'), 0)
 
+	var ambient=new THREE.AmbientLight(0xfff);
+    scene.add(ambient);
+
+	var directctionalLight=new THREE.DirectionalLight(0xfff);
+    directctionalLight.position.set(1,1,1).normalize();
+	scene.add(directctionalLight);
 	// renderer.setPixelRatio( 1/2 );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.domElement.style.position = 'absolute'
@@ -169,13 +175,13 @@
 	// 	item.material.color.setHex(0xffffff);
 	//   })
 
-	   var material = new THREE.MeshNormalMaterial({
-		transparent : true,
-		opacity: 0.5,
-		side: THREE.DoubleSide
-	});
-	var mesh	= new THREE.Mesh( obj, material );
-	arWorldRoot.add( mesh );
+	//    var material = new THREE.MeshNormalMaterial({
+	// 	transparent : true,
+	// 	opacity: 0.5,
+	// 	side: THREE.DoubleSide
+	// });
+	// var mesh	= new THREE.Mesh( obj, material );
+	// arWorldRoot.add( mesh );
 	//   obj.castShadow = true;
 	//   obj.receiveShadow = true; // @ts-ignore：无法被执行的代码的错误
 	//   obj.material = new THREE.MeshPhongMaterial({
@@ -185,7 +191,7 @@
 	// 	opacity: 0.8,
 	// 	transparent: true,
 	// 	});
-	//   arWorldRoot.add(obj);
+	  arWorldRoot.add(obj);
 	})
 
 
