@@ -16,7 +16,7 @@
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'><div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
 	<a href="https://github.com/jeromeetienne/AR.js/" target="_blank">AR.js</a> - three.js mobile performance
 	<br/>
-	Contact me any time at <a href='https://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>
+	Contact me any time at1234 <a href='https://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>
 </div><script>
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Init
@@ -47,6 +47,12 @@
 
 	// Create a camera
 	var camera = new THREE.Camera();
+	camera.position.set(100,0,0); //设置相机位置
+	camera.lookAt({
+		x: 0,
+		y: 1000,
+		z: 0
+	}); //设置相机方向(指向的场景对象)
 	scene.add(camera);
     console.log(camera);
 	////////////////////////////////////////////////////////////////////////////////
@@ -150,7 +156,7 @@
 	// 没有材质文件，系统自动设置Phong网格材质
 	loader.load('https://ued.united-imaging.com//doc_server//doc_server//arlib//pattern//123//327f22180ac046ae8d9d4d03028da111.obj',function (obj) {
 	  // 控制台查看返回结构：包含一个网格模型Mesh的组Group
-	  object.position.set(0, 0, -10);
+	  object.position.set(0, 0, 0);
 	  object.scale.set(0.01, 0.01, 0.01);
 	  console.log(obj);
 	  // 查看加载器生成的材质对象：MeshPhongMaterial
