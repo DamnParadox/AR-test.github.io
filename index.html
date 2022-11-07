@@ -28,13 +28,6 @@
 		alpha: true
 	});
 	renderer.setClearColor(new THREE.Color('lightgrey'), 0)
-
-	var ambient=new THREE.AmbientLight(0xfff);
-    scene.add(ambient);
-
-	var directctionalLight=new THREE.DirectionalLight(0xfff);
-    directctionalLight.position.set(1,1,1).normalize();
-	scene.add(directctionalLight);
 	// renderer.setPixelRatio( 1/2 );
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	renderer.domElement.style.position = 'absolute'
@@ -216,6 +209,16 @@
 	// onRenderFcts.push(function(){
 	// 	mesh.rotation.x += 0.1
 	// })
+
+
+    // 光
+	var ambient=new THREE.AmbientLight(0xfff);
+    scene.add(ambient);
+
+	var directctionalLight=new THREE.DirectionalLight(0xfff);
+    directctionalLight.position.set(1,1,1).normalize();
+	scene.add(directctionalLight);
+
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		render the whole thing on the page
