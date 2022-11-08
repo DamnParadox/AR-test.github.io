@@ -211,6 +211,16 @@
 		// 	mesh.rotation.x += 0.1
 		// })
 
+
+
+		// 光
+		var ambient=new THREE.AmbientLight(0xffffff);
+		scene.add(ambient);
+
+		var directctionalLight=new THREE.DirectionalLight(0xffffff);
+		directctionalLight.position.set(1,1,1).normalize();
+		scene.add(directctionalLight);
+
 		//////////////////////////////////////////////////////////////////////////////////
 		//		render the whole thing on the page
 		//////////////////////////////////////////////////////////////////////////////////
