@@ -185,7 +185,9 @@
 			obj.scene.scale.set(0.1,0.1,0.1);
 			console.log(11);
 			console.log(obj);
-			scene.add(obj.scene);
+			
+			arWorldRoot.add(obj.scene);
+
 			mixer = new THREE.AnimationMixer(obj.scene);
 			mixer.clipAction(obj.animations[0]).play();
 		})
