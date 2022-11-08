@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <!-- three.js library -->
-<script src='vendor/three.js/build/three.min.js'></script>
-<!-- <script src='three.min.js'></script> -->
+<!-- <script src='vendor/three.js/build/three.min.js'></script> -->
+<script src='three.min.js'></script>
 <script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
 <!-- ar.js -->
 <script src="ar.js"></script>
@@ -12,7 +12,7 @@
   <!-- 引入模型加载库 -->
 <!-- <script src="vendor\three.js\examples\js\loaders\GLTFLoader.js"></script>
 <script src="vendor\three.js\examples\js\loaders\OBJLoader.js"></script> -->
-<script src="GLTF2Loader.js"></script>
+<script src="GLTFLoader.js"></script>
 
 
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'><div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
@@ -152,7 +152,7 @@
 
 	var clock = new THREE.Clock();
 	var mixer;
-	var loader = new THREE.GLTF2Loader();
+	var loader = new THREE.GLTFLoader();
 	// 没有材质文件，系统自动设置Phong网格材质
 	loader.load('https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb',function (obj) {
 	  //设置模型位置
