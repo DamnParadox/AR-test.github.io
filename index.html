@@ -8,15 +8,14 @@
 <script>THREEx.ArToolkitContext.baseURL = '../'</script>
 
 <script src="OrbitControls.js"></script><!--注意与threejs之间的版本兼容问题-->
-  <!-- 引入obj模型加载库OBJLoader.js -->
-<script src="vendor\three.js\examples\js\loaders\OBJLoader.js"></script>
-<!-- 引入obj模型材质加载库MTLLoader.js -->
-<script src="vendor\three.js\examples\js\loaders\MTLLoader.js"></script>
+  <!-- 引入模型加载库 -->
+<script src="vendor\three.js\examples\js\loaders\GLTFLoader.js"></script>
+
 
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'><div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
 	<a href="https://github.com/jeromeetienne/AR.js/" target="_blank">AR.js</a> - three.js mobile performance
 	<br/>
-	Contact me any time at12345 <a href='https://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>
+	Contact me any time at gltf <a href='https://twitter.com/jerome_etienne' target='_blank'>@jerome_etienne</a>
 </div><script>
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Init
@@ -146,36 +145,50 @@
 	//		add an object in the scene
 	//////////////////////////////////////////////////////////////////////////////////
 
-	var arWorldRoot = smoothedRoot
+	var arWorldRoot = smoothedRoot;
 
+	var clock = new THREE.Clock();
+	var mixer;
+	var loader = new THREE.GLTFLoader();
+	// 没有材质文件，系统自动设置Phong网格材质
+	loader.load('https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb',function (obj) {
+	  // obj.scale.set(0.01,0.01,0.01);
+      // obj.position.set(0,0,0.5);
+	  console.log(obj);
+	  scene.add(obj.scene);
+	  //设置模型位置
+      obj.scene.position.set(0,-2,0)
+	  mixer = new THREE.AnimationMixer(obj.scene);
+	  mixer.clipAction(obj.animations[0]).play();
+	})
 
 	/**
 	 * OBJ文件加载  只加载obj文件中的几何信息，不加载材质文件.mtl
 	 */
-	var loader = new THREE.OBJLoader();
-	// 没有材质文件，系统自动设置Phong网格材质
-	loader.load('https://ued.united-imaging.com//doc_server//doc_server//arlib//pattern//123//f947152451713e57228056981f4d8b2a.obj',function (obj) {
-	  // 控制台查看返回结构：包含一个网格模型Mesh的组Group
-	  obj.position.set(0, 0, 0.5);
-	  //obj.scale.set(0.005, 0.005, 0.005);
-	  console.log(obj);
-	  // 查看加载器生成的材质对象：MeshPhongMaterial
-	  console.log(obj.children[0].material);
-	  // 旋转
-	  obj.rotation.x = (-90 * Math.PI) / 180;
-	  // 改颜色
-		var material	= new THREE.MeshNormalMaterial({
-			transparent : true,
-			opacity: 0.9,
-			side: THREE.DoubleSide
-		});
-	  for(var i=0;i<3;i++){
-		// obj.children[i].material.color.set(0xffffff)
-		obj.children[i].material=material
-	  }
+	// var loader = new THREE.OBJLoader();
+	// // 没有材质文件，系统自动设置Phong网格材质
+	// loader.load('https://ued.united-imaging.com//doc_server//doc_server//arlib//pattern//123//f947152451713e57228056981f4d8b2a.obj',function (obj) {
+	//   // 控制台查看返回结构：包含一个网格模型Mesh的组Group
+	//   obj.position.set(0, 0, 0.5);
+	//   //obj.scale.set(0.005, 0.005, 0.005);
+	//   console.log(obj);
+	//   // 查看加载器生成的材质对象：MeshPhongMaterial
+	//   console.log(obj.children[0].material);
+	//   // 旋转
+	//   obj.rotation.x = (-90 * Math.PI) / 180;
+	//   // 改颜色
+	// 	var material	= new THREE.MeshNormalMaterial({
+	// 		transparent : true,
+	// 		opacity: 0.9,
+	// 		side: THREE.DoubleSide
+	// 	});
+	//   for(var i=0;i<3;i++){
+	// 	// obj.children[i].material.color.set(0xffffff)
+	// 	obj.children[i].material=material
+	//   }
 	  
-	  arWorldRoot.add(obj);
-	})
+	//   arWorldRoot.add(obj);
+	// })
 
 
 
@@ -218,6 +231,10 @@
 	// render the scene
 	onRenderFcts.push(function(){
 		renderer.render( scene, camera );
+		// 更新动画帧
+		if(mixer){
+			mixer.update(clock.getDelta());
+		}
 		stats.update();
 	})
 
