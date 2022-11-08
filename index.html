@@ -228,11 +228,11 @@
 		document.body.appendChild(stats.dom);
 		// render the scene
 		onRenderFcts.push(function () {
-			renderer.render(scene, camera);
 			// 更新动画帧
 			if(mixer){
 				mixer.update(clock.getDelta());
 			}
+			renderer.render(scene, camera);
 			stats.update();
 		})
 
