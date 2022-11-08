@@ -7,6 +7,9 @@
 <script src="ar-threex.js"></script>
 <script>THREEx.ArToolkitContext.baseURL = '../'</script>
 
+<!-- 模型加载 -->
+<script src="vendor/three.js/GLTFLoader.js"></script>
+
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
 	<div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
 		<a href="https://github.com/AR-js-org/AR.js/" target="_blank">AR.js</a> - three.js mobile performance
@@ -170,26 +173,43 @@
 
 		var arWorldRoot = smoothedRoot
 
-		// add a torus knot
-		var geometry = new THREE.BoxGeometry(1, 1, 1);
-		var material = new THREE.MeshNormalMaterial({
-			transparent: true,
-			opacity: 0.5,
-			side: THREE.DoubleSide
-		});
-		var mesh = new THREE.Mesh(geometry, material);
-		mesh.position.y = geometry.parameters.height / 2
-		arWorldRoot.add(mesh);
+		
 
-		var geometry = new THREE.TorusKnotGeometry(0.3, 0.1, 64, 16);
-		var material = new THREE.MeshNormalMaterial();
-		var mesh = new THREE.Mesh(geometry, material);
-		mesh.position.y = 0.5
-		arWorldRoot.add(mesh);
-
-		onRenderFcts.push(function () {
-			mesh.rotation.x += 0.1
+		var clock = new THREE.Clock();
+		var mixer;
+		var loader = new THREE.GLTFLoader();
+		// 没有材质文件，系统自动设置Phong网格材质
+		loader.load('https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb',function (obj) {
+			//设置模型位置
+			obj.scene.position.set(0,0,0)
+			// obj.scene.scale.set(0.1,0.1,0.1);
+			console.log(11);
+			console.log(obj);
+			scene.add(obj.scene);
+			mixer = new THREE.AnimationMixer(obj.scene);
+			mixer.clipAction(obj.animations[0]).play();
 		})
+
+		// add a torus knot
+		// var geometry = new THREE.BoxGeometry(1, 1, 1);
+		// var material = new THREE.MeshNormalMaterial({
+		// 	transparent: true,
+		// 	opacity: 0.5,
+		// 	side: THREE.DoubleSide
+		// });
+		// var mesh = new THREE.Mesh(geometry, material);
+		// mesh.position.y = geometry.parameters.height / 2
+		// arWorldRoot.add(mesh);
+
+		// var geometry = new THREE.TorusKnotGeometry(0.3, 0.1, 64, 16);
+		// var material = new THREE.MeshNormalMaterial();
+		// var mesh = new THREE.Mesh(geometry, material);
+		// mesh.position.y = 0.5
+		// arWorldRoot.add(mesh);
+
+		// onRenderFcts.push(function () {
+		// 	mesh.rotation.x += 0.1
+		// })
 
 		//////////////////////////////////////////////////////////////////////////////////
 		//		render the whole thing on the page
@@ -199,6 +219,10 @@
 		// render the scene
 		onRenderFcts.push(function () {
 			renderer.render(scene, camera);
+			// 更新动画帧
+			if(mixer){
+				mixer.update(clock.getDelta());
+			}
 			stats.update();
 		})
 
