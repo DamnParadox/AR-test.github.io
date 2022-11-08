@@ -191,7 +191,7 @@
 		// 没有材质文件，系统自动设置Phong网格材质
 		loader.load('https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb',function (obj) {
 			//设置模型位置
-			obj.scene.position.set(0,-2,0)
+			obj.scene.position.set(0,-1,0)
 			obj.scene.scale.set(0.4,0.4,0.4);
 			// 旋转
 			obj.scene.rotation.x = (-90 * Math.PI) / 180;
@@ -235,6 +235,20 @@
 		var directctionalLight=new THREE.DirectionalLight(0xffffff);
 		directctionalLight.position.set(1,1,1).normalize();
 		scene.add(directctionalLight);
+
+				
+		/**
+		 * 创建辅助坐标轴，红色代表 X 轴. 绿色代表 Y 轴. 蓝色代表 Z 轴.
+		 */
+		var axesHelper = new THREE.AxesHelper( 100 );
+		scene.add( axesHelper );
+			
+		
+		/**
+		 * 创建辅助网格
+		 */
+		var grid = new THREE.GridHelper(100,100);
+		scene.add(grid);
 
 		//////////////////////////////////////////////////////////////////////////////////
 		//		render the whole thing on the page
