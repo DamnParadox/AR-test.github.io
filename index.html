@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 <!-- three.js library -->
-<script src='vendor/three.js/build/three.min.js'></script>
+<!-- <script src='vendor/three.js/build/three.min.js'></script> -->
+<script src='three.min.js'></script>
 <script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
 <!-- ar.js -->
 <script src="ar.js"></script>
@@ -9,8 +10,9 @@
 
 <script src="OrbitControls.js"></script><!--注意与threejs之间的版本兼容问题-->
   <!-- 引入模型加载库 -->
-<script src="vendor\three.js\examples\js\loaders\GLTFLoader.js"></script>
-<script src="vendor\three.js\examples\js\loaders\OBJLoader.js"></script>
+<!-- <script src="vendor\three.js\examples\js\loaders\GLTFLoader.js"></script>
+<script src="vendor\three.js\examples\js\loaders\OBJLoader.js"></script> -->
+<script src="GLTFLoader.js"></script>
 
 
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'><div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
@@ -153,12 +155,11 @@
 	var loader = new THREE.GLTFLoader();
 	// 没有材质文件，系统自动设置Phong网格材质
 	loader.load('https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb',function (obj) {
-	  // obj.scale.set(0.01,0.01,0.01);
-      // obj.position.set(0,0,0.5);
+	  //设置模型位置
+      obj.scene.position.set(0,0,0)
+	  obj.scene.scale.set(0.1,0.1,0.1);
 	  console.log(obj);
 	  scene.add(obj.scene);
-	  //设置模型位置
-      obj.scene.position.set(0,-2,0)
 	  mixer = new THREE.AnimationMixer(obj.scene);
 	  mixer.clipAction(obj.animations[0]).play();
 	})
