@@ -9,14 +9,23 @@
 
 <!-- 模型加载 -->
 <script src="vendor/three.js/GLTFLoader.js"></script>
-
+<style>
+</style>
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
 	<div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
 		<a href="https://github.com/AR-js-org/AR.js/" target="_blank">AR.js</a> - three.js mobile performance
 		<br />
 		Contact me any time at <a href='https://twitter.com/nicolocarp' target='_blank'>@nicolocarp</a>
 	</div>
+	<div style="position: absolute;left: 0px; bottom: 0px;width:100%;height: 100px;padding: 10px;">
+		<button onclick="changeAction(0)">dance0</button>
+		<button onclick="changeAction(10)">walk10</button>
+		<button onclick="changeAction(11)">walkjump11</button>
+		<button onclick="changeAction(6)">run6</button>
+	</div>
 	<script>
+		var whoAction=0;
+
 		//////////////////////////////////////////////////////////////////////////////////
 		//		Init
 		//////////////////////////////////////////////////////////////////////////////////
@@ -182,7 +191,7 @@
 		loader.load('https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb',function (obj) {
 			//设置模型位置
 			obj.scene.position.set(0,0,2)
-			obj.scene.scale.set(0.5,0.5,0.5);
+			obj.scene.scale.set(0.4,0.4,0.4);
 			// 旋转
 			obj.scene.rotation.x = (-90 * Math.PI) / 180;
 			console.log(11);
@@ -191,7 +200,7 @@
 			arWorldRoot.add(obj.scene);
 
 			mixer = new THREE.AnimationMixer(obj.scene);
-			mixer.clipAction(obj.animations[6]).play();
+			mixer.clipAction(obj.animations[whoAction]).play();
 		})
 
 		// add a torus knot
@@ -254,5 +263,11 @@
 				onRenderFct(deltaMsec / 1000, nowMsec / 1000)
 			})
 		})
+
+		function changeAction(num){
+			mixer.clipAction(obj.animations[whoAction]).stop();
+			mixer.clipAction(obj.animations[num]).play();
+			whoAction=num;
+		}
 	</script>
 </body>
