@@ -299,19 +299,20 @@
 			var ball = new THREE.Mesh(geometry3, material);
 			ball.position.set(0,mid,1.2);
 			arWorldRoot.add(ball);
-			var zDis = mid*(Math.tan(ball.rotation.x))
-			var xDis = mid*(Math.tan(ball.rotation.y))
-			console.log(ball.rotation.x);
-			console.log(ball.rotation.y);
+			var zDis = mid*(Math.tan(gun.rotation.x))
+			var xDis = mid*(Math.tan(gun.rotation.y))
+			console.log(gun.rotation.x);
+			console.log(gun.rotation.y);
 			console.log(zDis);
 			console.log(xDis);
 			onRenderFcts.push(function () {
 				ball.position.y-=mid/10 // 前进
 				ball.position.z-=zDis/10 // 上升
 				ball.position.x+=xDis/10 // 左右
-				console.log(11,ball.position.y);
 				if(ball.position.y <=0.15){
-					ball.clear()
+					ball.geometry·dispose();
+    				ball.material.dispose();
+					arWorldRoot.remove(ball);
 				}
 
 			})
