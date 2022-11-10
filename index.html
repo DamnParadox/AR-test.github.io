@@ -295,12 +295,12 @@
 
 		function shot(){
 			// tan71.565°等于3。上下最大角度为70
-		    var geometry3 = new THREE.SphereGeometry(0.05);
-			var ball = new THREE.Mesh(geometry3, material);
+		    let geometry3 = new THREE.SphereGeometry(0.05);
+			let ball = new THREE.Mesh(geometry3, material);
 			ball.position.set(0,mid,1.2);
 			arWorldRoot.add(ball);
-			var zDis = mid*(Math.tan(gun.rotation.x))
-			var xDis = mid*(Math.tan(gun.rotation.y))
+			let zDis = mid*(Math.tan(gun.rotation.x))
+			let xDis = mid*(Math.tan(gun.rotation.y))
 			console.log(gun.rotation.x);
 			console.log(gun.rotation.y);
 			console.log(zDis);
