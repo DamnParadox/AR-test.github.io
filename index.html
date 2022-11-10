@@ -281,13 +281,10 @@
 		})
 
 
-
-		var gun = new THREE.Mesh(geometry, material);
-		gun.position.set(0,0.8,0.8);
+		var geometry2 = new THREE.BoxGeometry(0.2, 0.4, 0.2);
+		var gun = new THREE.Mesh(geometry2, material);
+		gun.position.set(0,4,0.8);
 		arWorldRoot.add(gun);
-		onRenderFcts.push(function () {
-			gun.rotation.x += 0.1
-		})
 
 
 
