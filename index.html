@@ -304,9 +304,9 @@
 			ball.position.set(0,mid,1.2);
 			arWorldRoot.add(ball);
 			let zDis = mid*(Math.tan(gun.rotation.x))
-			let xDis = mid*(Math.tan(gun.rotation.y))
+			let xDis = mid*(Math.tan(gun.rotation.z))
 			console.log(gun.rotation.x);
-			console.log(gun.rotation.y);
+			console.log(gun.rotation.z);
 			console.log(zDis);
 			console.log(xDis);
 			onRenderFcts.push(function () {
