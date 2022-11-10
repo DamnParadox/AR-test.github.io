@@ -208,7 +208,7 @@
 
 		// add a torus knot
 
-		var geometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
+		var geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
 		var material = new THREE.MeshNormalMaterial({
 			transparent: true,
 			opacity: 0.8,
@@ -218,21 +218,21 @@
 		mesh1.position.set(0,0.1,0);
 		arWorldRoot.add(mesh1);
 		onRenderFcts.push(function () {
-			mesh1.rotation.z += 0.1
+			mesh1.rotation.z += 0.05
 		})
 
 		var mesh2 = new THREE.Mesh(geometry, material);
 		mesh2.position.set(0,0.1,0.6);
 		arWorldRoot.add(mesh2);
 		onRenderFcts.push(function () {
-			mesh2.rotation.z += 0.1
+			mesh2.rotation.z += 0.05
 		})
 
 		var mesh3 = new THREE.Mesh(geometry, material);
 		mesh3.position.set(0,0.1,-0.6);
 		arWorldRoot.add(mesh3);
 		onRenderFcts.push(function () {
-			mesh3.rotation.z += 0.1
+			mesh3.rotation.z += 0.05
 		})
 
 
@@ -241,21 +241,21 @@
 		mesh4.position.set(0.6,0.1,0);
 		arWorldRoot.add(mesh4);
 		onRenderFcts.push(function () {
-			mesh4.rotation.z += 0.1
+			mesh4.rotation.z += 0.05
 		})
 
 		var mesh5 = new THREE.Mesh(geometry, material);
 		mesh5.position.set(0.6,0.1,0.6);
 		arWorldRoot.add(mesh5);
 		onRenderFcts.push(function () {
-			mesh5.rotation.z += 0.1
+			mesh5.rotation.z += 0.05
 		})
 
 		var mesh6 = new THREE.Mesh(geometry, material);
 		mesh6.position.set(0.6,0.1,-0.6);
 		arWorldRoot.add(mesh6);
 		onRenderFcts.push(function () {
-			mesh6.rotation.z += 0.1
+			mesh6.rotation.z += 0.05
 		})
 
 
@@ -263,28 +263,28 @@
 		mesh7.position.set(-0.6,0.1,0);
 		arWorldRoot.add(mesh7);
 		onRenderFcts.push(function () {
-			mesh7.rotation.z += 0.1
+			mesh7.rotation.z += 0.05
 		})
 
 		var mesh8 = new THREE.Mesh(geometry, material);
 		mesh8.position.set(-0.6,0.1,0.6);
 		arWorldRoot.add(mesh8);
 		onRenderFcts.push(function () {
-			mesh8.rotation.z += 0.1
+			mesh8.rotation.z += 0.05
 		})
 
 		var mesh9 = new THREE.Mesh(geometry, material);
 		mesh9.position.set(-0.6,0.1,-0.6);
 		arWorldRoot.add(mesh9);
 		onRenderFcts.push(function () {
-			mesh9.rotation.z += 0.1
+			mesh9.rotation.z += 0.05
 		})
 
 
 		var geometry2 = new THREE.BoxGeometry(0.1, 0.2, 0.1);
 		var gun = new THREE.Mesh(geometry2, material);
 		gun.position.set(0,0.8,1.2);
-		gun.rotation.x = (-30 * Math.PI) / 180;
+		gun.rotation.x = (-45 * Math.PI) / 180;
 		arWorldRoot.add(gun);
 
 
