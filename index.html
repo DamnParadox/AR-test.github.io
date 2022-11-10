@@ -302,7 +302,7 @@
 			var zDis = 0.1/(Math.cos(ball.rotation.z))
 			onRenderFcts.push(function () {
 				ball.position.y-=0.1/10 // 前进
-				ball.position.z+=zDis/10 // 上升
+				ball.position.z-=zDis/10 // 上升
 				if(ball.position.y <=0.15){
 					ball.clear()
 				}
