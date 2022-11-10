@@ -346,6 +346,10 @@
 			onRenderFcts.forEach(function (onRenderFct) {
 				onRenderFct(deltaMsec / 1000, nowMsec / 1000)
 			})
+			Object.values(onRenderFctsmy).forEach(function (onRenderFct) {
+				onRenderFct(deltaMsec / 1000, nowMsec / 1000)
+			})
+
 		})
 
 		function changeAction(num){
