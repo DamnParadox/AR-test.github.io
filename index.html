@@ -57,6 +57,8 @@
 
 		// array of functions for the rendering loop
 		var onRenderFcts = [];
+		var onRenderFctsmy = {};
+
 		var arToolkitContext, artoolkitMarker, markerRoot;
 
 		// init scene and camera
@@ -247,11 +249,11 @@
 			targets.push(mesh);
 		}
 		
-		targets.forEach((item)=>{
+		targets.forEach((item,i)=>{
 			arWorldRoot.add(item);
-			onRenderFcts.push(function () {
-				if(item){item.rotation.z += 0.05}
-			})
+			onRenderFctsmy['selfAnim'+i]=function () {
+				item.rotation.z += 0.05
+			}
 		})
 
 		var mid = 0.7;
@@ -282,25 +284,27 @@
 			arWorldRoot.add(ball);
 			let zDis = mid*(Math.tan(gun.rotation.x))
 			let xDis = mid*(Math.tan(gun.rotation.z))
-			onRenderFcts.push(function () {
-				console.log(22,ball);
-				if(ball){
-					console.log(33,ball);
-					ball.position.y-=mid/10 // 前进
-					ball.position.z-=zDis/10 // 上升
-					ball.position.x+=xDis/10 // 左右
-					targets.forEach((item,index)=>{
-						if(ball.position.y <=0.1){
-							if(item && hitTest(ball,item)){
-								arWorldRoot.remove(item)
-								targets[index]=null;
-							}
-							arWorldRoot.remove(ball);
-							ball=null;
+			let num = Math.random()*10000;
+			onRenderFctsmy['ballMove'+num]=function () {
+				ball.position.y-=mid/10 // 前进
+				ball.position.z-=zDis/10 // 上升
+				ball.position.x+=xDis/10 // 左右
+				if(ball.position.y <=0.1){
+					delete onRenderFctsmy['ballMove'+num];
+					delete onRenderFctsmy.isShot;
+					arWorldRoot.remove(ball);
+				}
+			}
+			onRenderFctsmy.isShot=function () {
+				if(ball.position.y <=0.15){
+					targets.forEach((item,i)=>{
+						if(hitTest(ball,item)){
+							delete onRenderFctsmy['selfAnim'+i]
+							arWorldRoot.remove(item)
 						}
 					})
 				}
-			})
+			}
 		}
 
 
