@@ -283,7 +283,9 @@
 			let zDis = mid*(Math.tan(gun.rotation.x))
 			let xDis = mid*(Math.tan(gun.rotation.z))
 			onRenderFcts.push(function () {
+				console.log(22,ball);
 				if(ball){
+					console.log(33,ball);
 					ball.position.y-=mid/10 // 前进
 					ball.position.z-=zDis/10 // 上升
 					ball.position.x+=xDis/10 // 左右
