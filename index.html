@@ -30,10 +30,10 @@
 	
 	<div style="position: absolute;left: 0px; bottom: 0px;width:100%;height: 100px;padding: 10px;">
 		<button onclick="shot()">fire</button>
-		<button onclick="rotateGun(10,'left')">left</button>
-		<button onclick="rotateGun(10,'right')">right</button>
-		<button onclick="rotateGun(10,'up')">up</button>
-		<button onclick="rotateGun(10,'down')">down</button>
+		<button onclick="rotateGun(2,'left')">left</button>
+		<button onclick="rotateGun(2,'right')">right</button>
+		<button onclick="rotateGun(2,'up')">up</button>
+		<button onclick="rotateGun(2,'down')">down</button>
 	</div>
 	<script>
 		var whoAction=0;
@@ -297,8 +297,18 @@
 		arWorldRoot.add(gun);
 
 
+// 碰撞检测
+		function hitTest(obj1,obj2){
+			if(obj1.position.x<obj2.position.x+0.15 && obj1.position.x>obj2.position.x-0.15){
+				if(obj1.position.z<obj2.position.z+0.15 && obj1.position.z>obj2.position.z-0.15){
+					return true;
+				}
+			}
+			return false;
+		}
+// 射击
 		function shot(){
-			// tan71.565°等于3。上下最大角度为70
+			// tan71.565°等于3。上下最大角度为65,左右最多45
 		    let geometry3 = new THREE.SphereGeometry(0.05);
 			let ball = new THREE.Mesh(geometry3, material);
 			ball.position.set(0,mid,1.2);
@@ -313,12 +323,22 @@
 				ball.position.y-=mid/10 // 前进
 				ball.position.z-=zDis/10 // 上升
 				ball.position.x+=xDis/10 // 左右
-				if(ball.position.y <=0.15){
+				if(ball.position.y <=0.1){
+					hitTest(ball,mesh1)?scene.remove(mesh1):'';
+					hitTest(ball,mesh2)?scene.remove(mesh2):'';
+					hitTest(ball,mesh3)?scene.remove(mesh3):'';
+					hitTest(ball,mesh4)?scene.remove(mesh4):'';
+					hitTest(ball,mesh5)?scene.remove(mesh5):'';
+					hitTest(ball,mesh6)?scene.remove(mesh6):'';
+					hitTest(ball,mesh7)?scene.remove(mesh7):'';
+					hitTest(ball,mesh8)?scene.remove(mesh8):'';
+					hitTest(ball,mesh9)?scene.remove(mesh9):'';
 					arWorldRoot.remove(ball);
 				}
 
 			})
 		}
+
 
 
 		// 光
@@ -369,13 +389,33 @@
 			myobj.scene.position.y-=1;
 			console.log(myobj.scene);
 		}
-
+// 调整枪口
 		function rotateGun(num,type){
 			switch(type){
-				case 'left':gun.rotation.z-=(num * Math.PI) / 180;break;
-				case 'right':gun.rotation.z+=(num * Math.PI) / 180;break;
-				case 'up':gun.rotation.x+=(num * Math.PI) / 180;break;
-				case 'down':gun.rotation.x-=(num * Math.PI) / 180;break;
+				case 'left':
+					if(gun.rotation.z<=(-45 * Math.PI) / 180){
+						return;
+					}
+					gun.rotation.z-=(num * Math.PI) / 180;
+					break;
+				case 'right':
+					if(gun.rotation.z>=(45 * Math.PI) / 180){
+						return;
+					}
+					gun.rotation.z+=(num * Math.PI) / 180;
+					break;
+				case 'up':
+					if(gun.rotation.x>=(65 * Math.PI) / 180){
+						return;
+					}
+					gun.rotation.x+=(num * Math.PI) / 180;
+					break;
+				case 'down':
+					if(gun.rotation.z<=(10 * Math.PI) / 180){
+						return;
+					}
+					gun.rotation.x-=(num * Math.PI) / 180;
+					break;
 			}
 		}
 
