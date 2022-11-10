@@ -205,8 +205,6 @@
 			obj.scene.scale.set(0.4,0.4,0.4);
 			// 旋转
 			obj.scene.rotation.x = (-90 * Math.PI) / 180;
-			console.log(11);
-			console.log(obj);
 			
 			// arWorldRoot.add(obj.scene);
 
@@ -299,6 +297,8 @@
 
 // 碰撞检测
 		function hitTest(obj1,obj2){
+			console.log(obj1.position);
+			console.log(obj2.position);
 			if(obj1.position.x<obj2.position.x+0.15 && obj1.position.x>obj2.position.x-0.15){
 				if(obj1.position.z<obj2.position.z+0.15 && obj1.position.z>obj2.position.z-0.15){
 					return true;
@@ -315,10 +315,6 @@
 			arWorldRoot.add(ball);
 			let zDis = mid*(Math.tan(gun.rotation.x))
 			let xDis = mid*(Math.tan(gun.rotation.z))
-			console.log(gun.rotation.x);
-			console.log(gun.rotation.z);
-			console.log(zDis);
-			console.log(xDis);
 			onRenderFcts.push(function () {
 				ball.position.y-=mid/10 // 前进
 				ball.position.z-=zDis/10 // 上升
@@ -387,7 +383,6 @@
 		}
 		function goback(){
 			myobj.scene.position.y-=1;
-			console.log(myobj.scene);
 		}
 // 调整枪口
 		function rotateGun(num,type){
