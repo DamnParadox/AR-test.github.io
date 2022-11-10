@@ -372,8 +372,8 @@
 
 		function rotateGun(num,type){
 			switch(type){
-				case 'left':gun.rotation.z+=(num * Math.PI) / 180;break;
-				case 'right':gun.rotation.z-=(num * Math.PI) / 180;break;
+				case 'left':gun.rotation.z-=(num * Math.PI) / 180;break;
+				case 'right':gun.rotation.z+=(num * Math.PI) / 180;break;
 				case 'up':gun.rotation.x+=(num * Math.PI) / 180;break;
 				case 'down':gun.rotation.x-=(num * Math.PI) / 180;break;
 			}
