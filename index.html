@@ -17,7 +17,7 @@
 		<br />
 		Contact me any time at <a href='https://twitter.com/nicolocarp' target='_blank'>@nicolocarp</a>
 	</div>
-	<div style="position: absolute;left: 0px; bottom: 0px;width:100%;height: 100px;padding: 10px;">
+	<!-- <div style="position: absolute;left: 0px; bottom: 0px;width:100%;height: 100px;padding: 10px;">
 		<button onclick="goback()">后退</button>
 		<button onclick="changeAction(0)">dance0</button>
 		<button onclick="changeAction(10)">walk10</button>
@@ -25,6 +25,11 @@
 		<button onclick="changeAction(6)">run6</button>
 		<button onclick="changeAction(4)">no4</button>
 		<button onclick="changeAction(12)">wave12</button>
+	</div> -->
+
+	
+	<div style="position: absolute;left: 0px; bottom: 0px;width:100%;height: 100px;padding: 10px;">
+		<button onclick="shot()">fire</button>
 	</div>
 	<script>
 		var whoAction=0;
@@ -284,11 +289,19 @@
 		var geometry2 = new THREE.BoxGeometry(0.1, 0.2, 0.1);
 		var gun = new THREE.Mesh(geometry2, material);
 		gun.position.set(0,0.8,1.2);
-		gun.rotation.x = (-45 * Math.PI) / 180;
+		gun.rotation.x = (45 * Math.PI) / 180;
 		arWorldRoot.add(gun);
 
 
-
+		function shot(){
+		    var geometry3 = new THREE.SphereGeometry(0.05);
+			var ball = new THREE.Mesh(geometry3, material);
+			ball.position.set(0,0.4,1.2);
+			arWorldRoot.add(ball);
+			onRenderFcts.push(function () {
+				ball.rotation.y += 0.01
+			})
+		}
 
 
 		// 光
