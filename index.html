@@ -289,12 +289,12 @@
 		var geometry2 = new THREE.BoxGeometry(0.1, 0.2, 0.1);
 		var gun = new THREE.Mesh(geometry2, material);
 		gun.position.set(0,0.1+mid,1.2);
-		gun.rotation.x = (45 * Math.PI) / 180;
+		gun.rotation.x = (70 * Math.PI) / 180;
 		arWorldRoot.add(gun);
 
 
 		function shot(){
-			// tan63.43°等于2。上下最大角度为2
+			// tan71.565°等于3。上下最大角度为70
 		    var geometry3 = new THREE.SphereGeometry(0.05);
 			var ball = new THREE.Mesh(geometry3, material);
 			ball.position.set(0,mid,1.2);
@@ -309,6 +309,7 @@
 				ball.position.y-=mid/10 // 前进
 				ball.position.z-=zDis/10 // 上升
 				ball.position.x+=xDis/10 // 左右
+				console.log(11,ball.position.y);
 				if(ball.position.y <=0.15){
 					ball.clear()
 				}
