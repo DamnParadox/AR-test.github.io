@@ -238,10 +238,10 @@
 				z=-0.6
 			}
 			if(i>3 && i<=6){
-				x=0
+				z=0
 			}
 			if(i>6 && i<=9){
-				x=0.6
+				z=0.6
 			}
 			mesh.position.set(x,0.1,z);
 			targets.push(mesh);
@@ -283,19 +283,21 @@
 			let zDis = mid*(Math.tan(gun.rotation.x))
 			let xDis = mid*(Math.tan(gun.rotation.z))
 			onRenderFcts.push(function () {
-				ball.position.y-=mid/10 // 前进
-				ball.position.z-=zDis/10 // 上升
-				ball.position.x+=xDis/10 // 左右
-				targets.forEach((item,index)=>{
-					if(ball.position.y <=0.1){
-						if(item && hitTest(ball,item)){
-							arWorldRoot.remove(item)
-							targets[index]=null;
+				if(ball){
+					ball.position.y-=mid/10 // 前进
+					ball.position.z-=zDis/10 // 上升
+					ball.position.x+=xDis/10 // 左右
+					targets.forEach((item,index)=>{
+						if(ball.position.y <=0.1){
+							if(item && hitTest(ball,item)){
+								arWorldRoot.remove(item)
+								targets[index]=null;
+							}
+							arWorldRoot.remove(ball);
+							ball=null;
 						}
-						arWorldRoot.remove(ball);
-					}
-				})
-
+					})
+				}
 			})
 		}
 
