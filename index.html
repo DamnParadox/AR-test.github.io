@@ -298,8 +298,15 @@
 			var ball = new THREE.Mesh(geometry3, material);
 			ball.position.set(0,0.4,1.2);
 			arWorldRoot.add(ball);
+			console.log(ball.rotation.z);
+			var zDis = 0.1/(Math.cos(ball.rotation.z))
 			onRenderFcts.push(function () {
-				ball.position.z -= 0.05
+				ball.position.y-=0.1/10 // 前进
+				ball.position.z+=0.1/10 // 上升
+				if(ball.position.y <=0.15){
+					ball.clear()
+				}
+
 			})
 		}
 
