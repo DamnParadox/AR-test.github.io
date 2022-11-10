@@ -298,9 +298,9 @@
 			var ball = new THREE.Mesh(geometry3, material);
 			ball.position.set(0,0.4,1.2);
 			arWorldRoot.add(ball);
-			setInterval(()=>{
-				ball.rotation.z -= 0.05
-			},1000)
+			onRenderFcts.push(function () {
+				ball.position.z -= 0.05
+			})
 		}
 
 
