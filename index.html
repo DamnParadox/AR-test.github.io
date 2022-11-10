@@ -221,70 +221,37 @@
 			opacity: 0.8,
 			side: THREE.DoubleSide
 		});
-		var mesh1 = new THREE.Mesh(geometry, material);
-		mesh1.position.set(0,0.1,0);
-		arWorldRoot.add(mesh1);
-		onRenderFcts.push(function () {
-			mesh1.rotation.z += 0.05
-		})
-
-		var mesh2 = new THREE.Mesh(geometry, material);
-		mesh2.position.set(0,0.1,0.6);
-		arWorldRoot.add(mesh2);
-		onRenderFcts.push(function () {
-			mesh2.rotation.z += 0.05
-		})
-
-		var mesh3 = new THREE.Mesh(geometry, material);
-		mesh3.position.set(0,0.1,-0.6);
-		arWorldRoot.add(mesh3);
-		onRenderFcts.push(function () {
-			mesh3.rotation.z += 0.05
-		})
-
-
+		var targets = [];
+		for(let i=1;i<=9;i++){
+			let mesh = new THREE.Mesh(geometry, material);
+			let x=0,z=0;
+			if(i%3==1){
+				x=-0.6
+			}
+			if(i%3==2){
+				x=0
+			}
+			if(i%3==0){
+				x=0.6
+			}
+			if(i<=3){
+				z=-0.6
+			}
+			if(i>3 && i<=6){
+				x=0
+			}
+			if(i>6 && i<=9){
+				x=0.6
+			}
+			mesh.position.set(x,0.1,z);
+			targets.push(mesh);
+		}
 		
-		var mesh4 = new THREE.Mesh(geometry, material);
-		mesh4.position.set(0.6,0.1,0);
-		arWorldRoot.add(mesh4);
-		onRenderFcts.push(function () {
-			mesh4.rotation.z += 0.05
-		})
-
-		var mesh5 = new THREE.Mesh(geometry, material);
-		mesh5.position.set(0.6,0.1,0.6);
-		arWorldRoot.add(mesh5);
-		onRenderFcts.push(function () {
-			mesh5.rotation.z += 0.05
-		})
-
-		var mesh6 = new THREE.Mesh(geometry, material);
-		mesh6.position.set(0.6,0.1,-0.6);
-		arWorldRoot.add(mesh6);
-		onRenderFcts.push(function () {
-			mesh6.rotation.z += 0.05
-		})
-
-
-		var mesh7 = new THREE.Mesh(geometry, material);
-		mesh7.position.set(-0.6,0.1,0);
-		arWorldRoot.add(mesh7);
-		onRenderFcts.push(function () {
-			mesh7.rotation.z += 0.05
-		})
-
-		var mesh8 = new THREE.Mesh(geometry, material);
-		mesh8.position.set(-0.6,0.1,0.6);
-		arWorldRoot.add(mesh8);
-		onRenderFcts.push(function () {
-			mesh8.rotation.z += 0.05
-		})
-
-		var mesh9 = new THREE.Mesh(geometry, material);
-		mesh9.position.set(-0.6,0.1,-0.6);
-		arWorldRoot.add(mesh9);
-		onRenderFcts.push(function () {
-			mesh9.rotation.z += 0.05
+		targets.forEach((item)=>{
+			arWorldRoot.add(item);
+			onRenderFcts.push(function () {
+				if(item){item.rotation.z += 0.05}
+			})
 		})
 
 		var mid = 0.7;
@@ -319,13 +286,15 @@
 				ball.position.y-=mid/10 // 前进
 				ball.position.z-=zDis/10 // 上升
 				ball.position.x+=xDis/10 // 左右
-				if(ball.position.y <=0.1){
-					if(mesh2 && hitTest(ball,mesh2)){
-						arWorldRoot.remove(mesh2)
-						mesh2=null;
+				targets.forEach((item,index)=>{
+					if(ball.position.y <=0.1){
+						if(item && hitTest(ball,item)){
+							arWorldRoot.remove(item)
+							targets[index]=null;
+						}
+						arWorldRoot.remove(ball);
 					}
-					arWorldRoot.remove(ball);
-				}
+				})
 
 			})
 		}
