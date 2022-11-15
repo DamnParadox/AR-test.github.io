@@ -78,7 +78,7 @@
 		// });
 
 
-		
+
 // 创建射线
 		window.addEventListener("touchend", (event) => {
 			//创建一个Raycaster光线投射
@@ -86,6 +86,7 @@
 			//创建一个射线向量
 			let mouse = new THREE.Vector2();
 
+			console.log(event.touches);
 			if(event.touches){
 				mouse.x=(event.touches[0].pageX/window.innerWidth)*2-1;
 				mouse.y=-(event.touches[0].pageY/window.innerHeight)*2+1;
