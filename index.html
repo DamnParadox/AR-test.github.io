@@ -78,15 +78,21 @@
 		// });
 
 
+		
 // 创建射线
-		window.addEventListener('touchmove', (event) => {
+		window.addEventListener("touchend", (event) => {
 			//创建一个Raycaster光线投射
 			let raycaster = new THREE.Raycaster();
 			//创建一个射线向量
 			let mouse = new THREE.Vector2();
 
-			mouse.x = (event.clientX / window.innerWidth) * 2 - 1
-			mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+			if(event.touches){
+				mouse.x=(event.touches[0].pageX/window.innerWidth)*2-1;
+				mouse.y=-(event.touches[0].pageY/window.innerHeight)*2+1;
+			}else{
+				mouse.x=(event.clientX/window.innerWidth)*2-1;
+				mouse.y=-(event.clientY/window.innerHeight)*2+1;	
+			}
 
 			if (mouse.x && mouse.y) {
 			    //鼠标与相机的射线
@@ -96,17 +102,11 @@
 			console.log(raycaster);
 
 			//获取与射线相交的所有物体
-			var intersects = raycaster.intersectObjects(scene.children);
+			let intersects = raycaster.intersectObjects(scene.children);
 
 			console.log('-----点击',intersects);
 
-		})
-
-
-
-
-
-
+		},false)
 
 
 
