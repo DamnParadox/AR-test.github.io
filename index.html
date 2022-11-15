@@ -106,6 +106,8 @@
 			let intersects = raycaster.intersectObjects(scene.children);
 
 			console.log('-----点击',intersects);
+			alert(''+raycaster.ray.directction.x+raycaster.ray.directction.y+raycaster.ray.directction.z)
+			alert(''+raycaster.ray.origin.x+raycaster.ray.origin.y+raycaster.ray.origin.z)
 
 		},false)
 
