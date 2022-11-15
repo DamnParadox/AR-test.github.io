@@ -61,13 +61,13 @@
 		//////////////////////////////////////////////////////////////////////////////////
 
 		// Create a camera
-		// var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 5000);
+		var camera = new THREE.PerspectiveCamera(45, 640/480, 1, 5000);
 
-		// scene.add(camera);
+		scene.add(camera);
 
 		// Create a camera
-		var camera = new THREE.Camera();
-		scene.add(camera);
+		// var camera = new THREE.Camera();
+		// scene.add(camera);
 
 		markerRoot = new THREE.Group
 		scene.add(markerRoot)
@@ -95,8 +95,8 @@
 
 			console.log(event.touches);
 			if(event.touches){
-				mouse.x=(event.touches[0].pageX/window.innerWidth)*2-1;
-				mouse.y=-(event.touches[0].pageY/window.innerHeight)*2+1;
+				mouse.x=(event.touches[0].pageX/640)*2-1;
+				mouse.y=-(event.touches[0].pageY/480)*2+1;
 			}else{
 				mouse.x=(event.clientX/window.innerWidth)*2-1;
 				mouse.y=-(event.clientY/window.innerHeight)*2+1;	
