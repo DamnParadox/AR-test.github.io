@@ -277,7 +277,7 @@
 		}
 // 射击
 		function shot(){
-			// tan71.565°等于3。上下最大角度为70,左右最多45
+			// tan71.565°等于3。上下最大角度为75,左右最多45
 		    let geometry3 = new THREE.SphereGeometry(0.05);
 			let ball = new THREE.Mesh(geometry3, material);
 			ball.position.set(0,mid,1.2);
@@ -376,13 +376,13 @@
 					gun.rotation.z+=(num * Math.PI) / 180;
 					break;
 				case 'up':
-					if(gun.rotation.x>=(70 * Math.PI) / 180){
+					if(gun.rotation.x>=(75 * Math.PI) / 180){
 						return;
 					}
 					gun.rotation.x+=(num * Math.PI) / 180;
 					break;
 				case 'down':
-					if(gun.rotation.z<=(70 * Math.PI) / 180){
+					if(gun.rotation.x<=(10 * Math.PI) / 180){
 						return;
 					}
 					gun.rotation.x-=(num * Math.PI) / 180;
