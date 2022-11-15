@@ -61,9 +61,16 @@
 		//////////////////////////////////////////////////////////////////////////////////
 
 		// Create a camera
-		var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 5000);
+		// var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 5000);
 
+		// scene.add(camera);
+
+		// Create a camera
+		var camera = new THREE.Camera();
 		scene.add(camera);
+
+		markerRoot = new THREE.Group
+		scene.add(markerRoot)
 
 		markerRoot = new THREE.Group
 		scene.add(markerRoot)
