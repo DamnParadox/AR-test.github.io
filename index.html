@@ -61,7 +61,7 @@
 		//////////////////////////////////////////////////////////////////////////////////
 
 		// Create a camera
-		var camera = new THREE.PerspectiveCamera(45, 640/480, 1, 5000);
+		var camera = new THREE.PerspectiveCamera(45, 390/300, 1, 5000);
 
 		scene.add(camera);
 
@@ -95,8 +95,8 @@
 
 			console.log(event.touches);
 			if(event.touches){
-				mouse.x=(event.touches[0].pageX/640)*2-1;
-				mouse.y=-(event.touches[0].pageY/480)*2+1;
+				mouse.x=(event.touches[0].pageX/390)*2-1;
+				mouse.y=-(event.touches[0].pageY/300)*2+1;
 			}else{
 				mouse.x=(event.clientX/window.innerWidth)*2-1;
 				mouse.y=-(event.clientY/window.innerHeight)*2+1;	
