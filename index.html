@@ -11,17 +11,32 @@
 <script src="vendor/three.js/GLTFLoader.js"></script>
 <style>
 </style>
-
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
 	<div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
 		<a href="https://github.com/AR-js-org/AR.js/" target="_blank">AR.js</a> - three.js mobile performance
 		<br />
 		Contact me any time at <a href='https://twitter.com/nicolocarp' target='_blank'>@nicolocarp</a>
 	</div>
+	<!-- <div style="position: absolute;left: 0px; bottom: 0px;width:100%;height: 100px;padding: 10px;">
+		<button onclick="goback()">后退</button>
+		<button onclick="changeAction(0)">dance0</button>
+		<button onclick="changeAction(10)">walk10</button>
+		<button onclick="changeAction(11)">walkjump11</button>
+		<button onclick="changeAction(6)">run6</button>
+		<button onclick="changeAction(4)">no4</button>
+		<button onclick="changeAction(12)">wave12</button>
+	</div> -->
 
+	
+	<div style="position: absolute;left: 0px; bottom: 0px;width:100%;height: 150px;">
+		<div style="margin: 10px 0;">
+			<button style="width: 46px;height: 30px; margin-left: calc(50% - 86px);" onclick="rotateGun(2,'left')">left</button>
+			<button style="width: 46px;height: 30px; margin-left: 10px;" onclick="shot()">fire</button>
+			<button style="width: 46px;height: 30px; margin-left: 10px;" onclick="rotateGun(2,'right')">right</button>
+		</div>
+	</div>
 	<script>
-		// 播放哪个动画
-		var whoAction = 0;
+		var whoAction=0;
 
 		//////////////////////////////////////////////////////////////////////////////////
 		//		Init
@@ -42,67 +57,23 @@
 
 		// array of functions for the rendering loop
 		var onRenderFcts = [];
+		var onRenderFctsmy = {};
+
 		var arToolkitContext, artoolkitMarker, markerRoot;
 
 		// init scene and camera
 		var scene = new THREE.Scene();
-
-	
 
 		//////////////////////////////////////////////////////////////////////////////////
 		//		Initialize a basic camera
 		//////////////////////////////////////////////////////////////////////////////////
 
 		// Create a camera
-		var camera = new THREE.PerspectiveCamera(45,  window.innerWidth/window.innerHeight, 1, 5000);
-
+		var camera = new THREE.Camera();
 		scene.add(camera);
-
-		// Create a camera
-		// var camera = new THREE.Camera();
-		// scene.add(camera);
 
 		markerRoot = new THREE.Group
 		scene.add(markerRoot)
-
-
-// 创建射线
-		window.addEventListener("touchstart", (event) => {
-			//创建一个Raycaster光线投射
-			let raycaster = new THREE.Raycaster();
-			//创建一个射线向量
-			let mouse = new THREE.Vector2();
-
-			console.log(event.touches);
-			if(event.touches){
-				mouse.x=(event.touches[0].pageX/390)*2-1;
-				mouse.y=-((event.touches[0].pageY/300)*2-1);
-			}else{
-				mouse.x=(event.clientX/window.innerWidth)*2-1;
-				mouse.y=-((event.clientY/window.innerHeight)*2-1);	
-			}
-
-			if (mouse.x && mouse.y) {
-			    //鼠标与相机的射线
-				raycaster.setFromCamera(mouse, camera)
-			}
-
-			console.log(raycaster);
-
-			//获取与射线相交的所有物体
-			let intersects = raycaster.intersectObjects(scene.children);
-
-			console.log('-----点击',intersects);
-			alert(''+window.innerWidth+window.innerHeight)
-			alert(''+mouse.x+mouse.y)
-			alert(''+raycaster.ray.direction.x+raycaster.ray.direction.y+raycaster.ray.direction.z)
-			alert(''+raycaster.ray.origin.x+raycaster.ray.origin.y+raycaster.ray.origin.z)
-
-		},false)
-
-
-
-
 
 		////////////////////////////////////////////////////////////////////////////////
 		//          handle arToolkitSource
@@ -204,6 +175,10 @@
 		//          Create a ArMarkerControls
 		////////////////////////////////////////////////////////////////////////////////
 
+		var markerRoot = new THREE.Group
+		scene.add(markerRoot)
+
+
 		// build a smoothedControls
 		var smoothedRoot = new THREE.Group()
 		scene.add(smoothedRoot)
@@ -226,20 +201,18 @@
 		var loader = new THREE.GLTFLoader();
 		var myobj = null;
 		// 没有材质文件，系统自动设置Phong网格材质
-		loader.load('https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb', function (obj) {
+		loader.load('https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb',function (obj) {
 			//设置模型位置
-			obj.scene.position.set(0, -1, 1)
-			obj.scene.scale.set(0.4, 0.4, 0.4);
+			obj.scene.position.set(0,-1,1)
+			obj.scene.scale.set(0.4,0.4,0.4);
 			// 旋转
 			obj.scene.rotation.x = (-90 * Math.PI) / 180;
-			console.log(11);
-			console.log(obj);
-
+			
 			// arWorldRoot.add(obj.scene);
 
 			mixer = new THREE.AnimationMixer(obj.scene);
 			mixer.clipAction(obj.animations[whoAction]).play();
-			myobj = obj;
+			myobj=obj;
 		})
 
 		// add a torus knot
@@ -250,80 +223,79 @@
 			opacity: 0.8,
 			side: THREE.DoubleSide
 		});
-		var mesh1 = new THREE.Mesh(geometry, material);
-		mesh1.position.set(0, 0.1, 0);
-		arWorldRoot.add(mesh1);
-		onRenderFcts.push(function () {
-			mesh1.rotation.z += 0.05
+		var targets = [];
+		for(let i=0;i<5;i++){
+			let mesh = new THREE.Mesh(geometry, material);
+			mesh.position.set(-0.9+i*0.6,0.1,-0.6);
+			targets.push(mesh);
+		}
+		
+		targets.forEach((item,i)=>{
+			arWorldRoot.add(item);
+			onRenderFctsmy['selfAnim'+i]=function () {
+				if(item.position.x>=2){
+					item.position.x = -2
+				}
+				item.position.x += 0.05
+			}
 		})
 
-		var mesh2 = new THREE.Mesh(geometry, material);
-		mesh2.position.set(0, 0.1, 0.6);
-		arWorldRoot.add(mesh2);
-		onRenderFcts.push(function () {
-			mesh2.rotation.z += 0.05
-		})
-
-		var mesh3 = new THREE.Mesh(geometry, material);
-		mesh3.position.set(0, 0.1, -0.6);
-		arWorldRoot.add(mesh3);
-		onRenderFcts.push(function () {
-			mesh3.rotation.z += 0.05
-		})
+		// var mid = 0.7;
+		var geometry2 = new THREE.BoxGeometry(0.1, 0.2, 0.1);
+		var gun = new THREE.Mesh(geometry2, material);
+		gun.position.set(0,0.1,1.2);
+		gun.rotation.x = (180 * Math.PI) / 180;
+		arWorldRoot.add(gun);
 
 
+// 碰撞检测
+		function hitTest(obj1,obj2){
+			console.log(obj1.position);
+			console.log(obj2.position);
+			if(obj1.position.x<obj2.position.x+0.15 && obj1.position.x>obj2.position.x-0.15){
+				return true;
+			}
+			return false;
+		}
+// 射击
+		function shot(){
+			// tan71.565°等于3。上下最大角度为75,左右最多45
+		    let geometry3 = new THREE.SphereGeometry(0.05);
+			let ball = new THREE.Mesh(geometry3, material);
+			ball.position.set(0,mid,1.2);
+			arWorldRoot.add(ball);
+			let zDis = mid*(Math.tan(gun.rotation.x))
+			let xDis = mid*(Math.tan(gun.rotation.z))
+			let num = Math.random()*10000;
+			onRenderFctsmy['ballMove'+num]=function () {
+				ball.position.z-=1.2/10 // 上升
+				if(ball.position.z <=-0.6){
+					delete onRenderFctsmy['ballMove'+num];
+					delete onRenderFctsmy.isShot;
+					arWorldRoot.remove(ball);
+				}
+			}
+			onRenderFctsmy.isShot=function () {
+				if(ball.position.z <=-0.65){
+					targets.forEach((item,i)=>{
+						if(hitTest(ball,item)){
+							delete onRenderFctsmy['selfAnim'+i]
+							arWorldRoot.remove(item)
+						}
+					})
+				}
+			}
+		}
 
-		var mesh4 = new THREE.Mesh(geometry, material);
-		mesh4.position.set(0.6, 0.1, 0);
-		arWorldRoot.add(mesh4);
-		onRenderFcts.push(function () {
-			mesh4.rotation.z += 0.05
-		})
 
-		var mesh5 = new THREE.Mesh(geometry, material);
-		mesh5.position.set(0.6, 0.1, 0.6);
-		arWorldRoot.add(mesh5);
-		onRenderFcts.push(function () {
-			mesh5.rotation.z += 0.05
-		})
-
-		var mesh6 = new THREE.Mesh(geometry, material);
-		mesh6.position.set(0.6, 0.1, -0.6);
-		arWorldRoot.add(mesh6);
-		onRenderFcts.push(function () {
-			mesh6.rotation.z += 0.05
-		})
-
-
-		var mesh7 = new THREE.Mesh(geometry, material);
-		mesh7.position.set(-0.6, 0.1, 0);
-		arWorldRoot.add(mesh7);
-		onRenderFcts.push(function () {
-			mesh7.rotation.z += 0.05
-		})
-
-		var mesh8 = new THREE.Mesh(geometry, material);
-		mesh8.position.set(-0.6, 0.1, 0.6);
-		arWorldRoot.add(mesh8);
-		onRenderFcts.push(function () {
-			mesh8.rotation.z += 0.05
-		})
-
-		var mesh9 = new THREE.Mesh(geometry, material);
-		mesh9.position.set(-0.6, 0.1, -0.6);
-		arWorldRoot.add(mesh9);
-		onRenderFcts.push(function () {
-			mesh9.rotation.z += 0.05
-		})
 
 		// 光
-		var ambient = new THREE.AmbientLight(0xffffff);
+		var ambient=new THREE.AmbientLight(0xffffff);
 		scene.add(ambient);
 
-		var directctionalLight = new THREE.DirectionalLight(0xffffff);
-		directctionalLight.position.set(1, 1, 1).normalize();
+		var directctionalLight=new THREE.DirectionalLight(0xffffff);
+		directctionalLight.position.set(1,1,1).normalize();
 		scene.add(directctionalLight);
-
 
 
 		//////////////////////////////////////////////////////////////////////////////////
@@ -334,10 +306,9 @@
 		// render the scene
 		onRenderFcts.push(function () {
 			// 更新动画帧
-			if (mixer) {
+			if(mixer){
 				mixer.update(clock.getDelta());
 			}
-
 			renderer.render(scene, camera);
 			stats.update();
 		})
@@ -355,9 +326,38 @@
 			onRenderFcts.forEach(function (onRenderFct) {
 				onRenderFct(deltaMsec / 1000, nowMsec / 1000)
 			})
-
+			Object.values(onRenderFctsmy).forEach(function (onRenderFct) {
+				onRenderFct(deltaMsec / 1000, nowMsec / 1000)
+			})
 
 		})
 
+		function changeAction(num){
+			mixer.clipAction(myobj.animations[whoAction]).stop();
+			mixer.clipAction(myobj.animations[num]).play();
+			whoAction=num;
+		}
+		function goback(){
+			myobj.scene.position.y-=1;
+		}
+// 调整枪口
+		function rotateGun(num,type){
+			switch(type){
+				case 'left':
+					if(gun.position.x<=-0.6){
+						return;
+					}
+					gun.position.x-=num;
+					break;
+				case 'right':
+					if(gun.position.x>=0.6){
+						return;
+					}
+					gun.position.x+=num;
+					break;
+			}
+		}
+
+		
 	</script>
 </body>
