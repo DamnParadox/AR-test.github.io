@@ -250,8 +250,8 @@
 
 // 碰撞检测
 		function hitTest(obj1,obj2){
-			console.log(obj1.position);
-			console.log(obj2.position);
+			// console.log(obj1.position);
+			// console.log(obj2.position);
 			if(obj1.position.y!=obj2.position.y)return false;
 			if(obj1.position.x<obj2.position.x+0.15 && obj1.position.x>obj2.position.x-0.15){
 				return true;
@@ -282,12 +282,14 @@
 					targets.forEach((item,i)=>{
 						if(hitTest(ball,item)){
 							item.position.y=0.05;
+							console.log(11,item);
 							onRenderFctsmy['selfAnim'+i]=function (item,i){
-								// if(item.position.z>3){
-								// 	delete onRenderFctsmy['selfAnim'+i]
-								// 	arWorldRoot.remove(item)
-								// 	return;
-								// }
+								console.log(22,item);
+								if(item.position.z>3){
+									delete onRenderFctsmy['selfAnim'+i]
+									arWorldRoot.remove(item)
+									return;
+								}
 								item.position.z+=0.1;
 							}
 						}
