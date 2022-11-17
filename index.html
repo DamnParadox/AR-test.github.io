@@ -283,11 +283,11 @@
 						if(hitTest(ball,item)){
 							item.position.y=0.05;
 							onRenderFctsmy['selfAnim'+i]=function (item,i){
-								if(item.position.z>3){
-									delete onRenderFctsmy['selfAnim'+i]
-									arWorldRoot.remove(item)
-									return;
-								}
+								// if(item.position.z>3){
+								// 	delete onRenderFctsmy['selfAnim'+i]
+								// 	arWorldRoot.remove(item)
+								// 	return;
+								// }
 								item.position.z+=0.1;
 							}
 						}
