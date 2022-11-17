@@ -37,6 +37,7 @@
 	</div>
 	<script>
 		var whoAction=0;
+		var ballFlag=0;
 
 		//////////////////////////////////////////////////////////////////////////////////
 		//		Init
@@ -240,7 +241,6 @@
 			}
 		})
 
-		// var mid = 0.7;
 		var geometry2 = new THREE.BoxGeometry(0.1, 0.2, 0.1);
 		var gun = new THREE.Mesh(geometry2, material);
 		gun.position.set(0,0.1,1.2);
@@ -252,6 +252,7 @@
 		function hitTest(obj1,obj2){
 			console.log(obj1.position);
 			console.log(obj2.position);
+			if(obj1.position.y!=obj2.position.y)return false;
 			if(obj1.position.x<obj2.position.x+0.15 && obj1.position.x>obj2.position.x-0.15){
 				return true;
 			}
@@ -259,11 +260,13 @@
 		}
 // 射击
 		function shot(){
+			if(ballFlag){return;}
 			// tan71.565°等于3。上下最大角度为75,左右最多45
 		    let geometry3 = new THREE.SphereGeometry(0.05);
 			let ball = new THREE.Mesh(geometry3, material);
 			ball.position.set(0,0.1,1.2);
 			arWorldRoot.add(ball);
+			ballFlag=1;
 			let num = Math.random()*10000;
 			onRenderFctsmy['ballMove'+num]=function () {
 				ball.position.z-=1.2/10 // 上升
@@ -271,14 +274,21 @@
 					delete onRenderFctsmy['ballMove'+num];
 					delete onRenderFctsmy.isShot;
 					arWorldRoot.remove(ball);
+					ballFlag=0;
 				}
 			}
 			onRenderFctsmy.isShot=function () {
 				if(ball.position.z <=-0.65){
 					targets.forEach((item,i)=>{
 						if(hitTest(ball,item)){
-							delete onRenderFctsmy['selfAnim'+i]
-							arWorldRoot.remove(item)
+							item.position.y=0.05;
+							onRenderFctsmy['selfAnim'+i]=function (item,i){
+								item.position.z+=0.1;
+								if(item.position.z>3){
+									delete onRenderFctsmy['selfAnim'+i]
+									arWorldRoot.remove(item)
+								}
+							}
 						}
 					})
 				}
