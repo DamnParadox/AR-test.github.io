@@ -282,9 +282,7 @@
 					targets.forEach((item,i)=>{
 						if(hitTest(ball,item)){
 							item.position.y=0.05;
-							console.log(11,item);
-							onRenderFctsmy['selfAnim'+i]=function (item,i){
-								console.log(22,item);
+							onRenderFctsmy['selfAnim'+i]=function (){
 								if(item.position.z>3){
 									delete onRenderFctsmy['selfAnim'+i]
 									arWorldRoot.remove(item)
