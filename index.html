@@ -1,5 +1,8 @@
 <!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="author" content="uih-ued">
 <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<title>圣诞雪人</title>
 <!-- three.js library -->
 <script src='vendor/three.js/build/three.min.js'></script>
 <script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
@@ -9,36 +12,162 @@
 
 <!-- 模型加载 -->
 <script src="vendor/three.js/GLTFLoader.js"></script>
+<script src="SVGLoader.js"></script>
 <style>
+	/* 成像位置 */
+	video{
+		top:13% !important;
+		height: 73% !important;
+		overflow: hidden;
+	}
+	/* 作为背景 */
+	.bgimg{
+		background-repeat: no-repeat;background-position: center center;background-size: 100% 100%;
+	}
+	/* 顶部 */
+	.header{
+		position: absolute;left: 0px; top: 0px;width:100%;height: 13%;background-image: url('./img/top.png');overflow: hidden;display: flex;align-items: center;
+	}
+	.topInfo{
+		background-color: #EFA052;
+		border: 2px solid black;
+		border-radius: 40px;
+		width: 120px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+	}
+	/* 顶部图标 */
+	.topicon{
+		height: 26px;
+		width: 22px;
+		margin-left: 22px;
+	}
+	/* 顶部文本 */
+	.toptext{
+		color: #2D2D2D;
+		font-weight: bold;
+		font-size: 24px;
+		margin-left: 10px;
+	}
+	/* 底部 */
+	.footer{
+		position: absolute;left: 0px; bottom: 0px;width:100%;height: 14%;background-image: url('./img/down.png');
+	}
+	.down-con{
+		margin: 0;height: 100%;width: 100%;display: flex;flex-direction: row;align-items: center;justify-content: space-evenly;
+	}
+	.downBtn{
+		background-color: transparent;border: 0px;width: 98px;height: 53px;
+	}
+	/* 遮罩 */
+	.mask{
+		height: 100vh;
+		width: 100vw;
+		position: absolute;
+		left: 0;
+		top: 0;
+		background-color: rgba(0, 0, 0, 0.3);
+		z-index: 9;
+	}
+	#overMask{
+		display: none;
+	}
+	/* 弹窗 */
+	.tanchuang{
+		width: 275px;
+		height: 379px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+	}
+	.modelbg{
+		width: 100%;
+	}
+	/* 开始弹窗信息 */
+	.start-btn{
+		width: 215px;
+		height: 53px;
+		position: absolute;
+		bottom: 30px;
+		left: 30px;
+	}
+	/* 结束弹窗信息 */
+	.over-text{
+		width: 100%;
+		height: 43px;
+		position: absolute;
+		top: 180px;
+		left: 0;
+		text-align: center;
+		line-height: 43px;
+		font-size: 18px;
+	}
+	#lastScore{
+		font-size: 36px;
+		font-weight: bold;
+	}
+	.over-btn,.again-btn{
+		width: 98px;
+		height: 53px;
+		position: absolute;
+		bottom: 30px;
+		left: 30px;
+	}
+	.again-btn{
+		left: 148px;
+	}
+
 </style>
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
-	<div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
-		<a href="https://github.com/AR-js-org/AR.js/" target="_blank">AR.js</a> - three.js mobile performance
-		<br />
-		Contact me any time at <a href='https://twitter.com/nicolocarp' target='_blank'>@nicolocarp</a>
-	</div>
-	<!-- <div style="position: absolute;left: 0px; bottom: 0px;width:100%;height: 100px;padding: 10px;">
-		<button onclick="goback()">后退</button>
-		<button onclick="changeAction(0)">dance0</button>
-		<button onclick="changeAction(10)">walk10</button>
-		<button onclick="changeAction(11)">walkjump11</button>
-		<button onclick="changeAction(6)">run6</button>
-		<button onclick="changeAction(4)">no4</button>
-		<button onclick="changeAction(12)">wave12</button>
-	</div> -->
-
-	
-	<div style="position: absolute;left: 0px; bottom: 0px;width:100%;height: 150px;">
-		<div style="margin: 10px 0;">
-			<button style="width: 46px;height: 30px; margin-left: calc(50% - 86px);" onclick="rotateGun(0.1,'left')">left</button>
-			<button style="width: 46px;height: 30px; margin-left: 10px;" onclick="shot()">fire</button>
-			<button style="width: 46px;height: 30px; margin-left: 10px;" onclick="rotateGun(0.1,'right')">right</button>
+	<!-- 1.开始界面 -->
+	<div id="readyMask" class="mask">
+		<div class="tanchuang">
+			<img class="modelbg" src="./img/startModel.png">
+			<img class="start-btn" src="./img/start-btn.png" onclick="startGame()"></img>
 		</div>
 	</div>
+	<!-- 3.结束界面 -->
+	<div id="overMask" class="mask">
+		<div class="tanchuang">
+			<img class="modelbg" src="./img/overModel.png">
+			<div class="over-text">获得 <span id="lastScore">0</span> 分</div>
+			<img class="over-btn" src="./img/over.png" onclick="returnGame()"></img>
+			<img class="again-btn" src="./img/again.png" onclick="againGame()"></img>
+		</div>
+	</div>
+	<!-- 2.游戏界面 -->
+	<!-- =2.1 界面元素 -->
+	<!-- ==头部 -->
+	<div class="header bgimg">
+		<div style="width: 100%;height: 40px;">
+			<div class="topInfo" style="float: left;margin-left: 60px;">
+				<span><img class="topicon" src="./img/clock.png"></img></span>
+				<span id="clock" class="toptext">30</span>
+			</div>
+			<div class="topInfo" style="float: right;margin-right: 60px;">
+				<span><img class="topicon" style="width: 26px;" src="./img/star.png"></img></span>
+				<span id="score" class="toptext">0</span>
+			</div>
+		</div>
+	</div>
+	<!-- ==底部 -->
+	<div class="footer bgimg">
+		<div class="down-con">
+			<button class="downBtn bgimg" style="background-image: url('./img/leftBtn.png');" onclick="rotateGun(0.1,'left')"></button>
+			<button class="downBtn bgimg" style="background-image: url('./img/fire.png');" onclick="shot()"></button>
+			<button class="downBtn bgimg" style="background-image: url('./img/rightBtn.png');" onclick="rotateGun(0.1,'right')"></button>
+		</div>
+	</div>
+	<!-- =2.2 ar建模元素 -->
+	<!-- ==成像区 -->
+	<div id="armain" style="position: absolute;left: 0px; top: 13%;width:100%;height: 73%;overflow: hidden;"></div>
 	<script>
-		var whoAction=0;
-		var ballFlag=0;
-
+		
+//==成像相关===========================================================================================================
 		//////////////////////////////////////////////////////////////////////////////////
 		//		Init
 		//////////////////////////////////////////////////////////////////////////////////
@@ -46,15 +175,16 @@
 		// init renderer
 		var renderer = new THREE.WebGLRenderer({
 			antialias: true,
+			precision: "highp", //333
 			alpha: true
 		});
 		renderer.setClearColor(new THREE.Color('lightgrey'), 0)
-		// renderer.setPixelRatio( 1/2 );
+		renderer.setPixelRatio(window.devicePixelRatio); //333
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		renderer.domElement.style.position = 'absolute'
 		renderer.domElement.style.top = '0px'
 		renderer.domElement.style.left = '0px'
-		document.body.appendChild(renderer.domElement);
+		document.getElementById("armain").appendChild(renderer.domElement);
 
 		// array of functions for the rendering loop
 		var onRenderFcts = [];
@@ -119,7 +249,8 @@
 			console.log('initARContext()');
 
 			arToolkitContext = new THREEx.ArToolkitContext({
-				cameraParametersUrl: 'https://jeromeetienne.github.io/AR.js/data/data/camera_para.dat',
+				// cameraParametersUrl: 'https://jeromeetienne.github.io/AR.js/data/data/camera_para.dat',
+				cameraParametersUrl: 'https://ued.united-imaging.com/doc_server/doc_server/resource/src/343c761a5174cf7f427e30ba75ceb63f.dat',  // 节点服务器-AR.js相机文件
 				detectionMode: 'mono',
 				maxDetectionRate: 30,
 				canvasWidth: 80 * 3,
@@ -137,7 +268,7 @@
 			})
 			artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot, {
 				type: 'pattern',
-				// patternUrl: 'https://ued.united-imaging.com//doc_server//doc_server//arlib//pattern//123//pattern.patt'
+				// patternUrl: 'https://ued.united-imaging.com//doc_server//doc_server//arlib//pattern//123//pattern.patt'  // 节点服务器-识别图
 				patternUrl: 'https://ued.united-imaging.com//doc_server//doc_server//resource//src//41e31a4ce57970c49385f10ce87c34e2.patt'
 				// patternUrl : THREEx.ArToolkitContext.baseURL + '../data/data/patt.kanji'
 			})
@@ -196,63 +327,185 @@
 		//		add an object in the scene
 		//////////////////////////////////////////////////////////////////////////////////
 
-		var arWorldRoot = smoothedRoot
+		var arWorldRoot = smoothedRoot;
+//###========================================================================================================================
 
-		var clock = new THREE.Clock();
-		var mixer;
-		var loader = new THREE.GLTFLoader();
-		var myobj = null;
-		// 没有材质文件，系统自动设置Phong网格材质
-		loader.load('https://ued.united-imaging.com//doc_server//doc_server//resource//src//70610664823701a3341a6e3db0af2fa7.glb',function (obj) {
-			//设置模型位置
-			obj.scene.position.set(0,-1,1)
-			obj.scene.scale.set(0.4,0.4,0.4);
-			// 旋转
-			obj.scene.rotation.x = (-90 * Math.PI) / 180;
-			
-			// arWorldRoot.add(obj.scene);
 
-			mixer = new THREE.AnimationMixer(obj.scene);
-			mixer.clipAction(obj.animations[whoAction]).play();
-			myobj=obj;
-		})
 
-		// add a torus knot
 
-		var geometry = new THREE.BoxGeometry(0.3, 0.3, 0.3);
-		var material = new THREE.MeshNormalMaterial({
-			transparent: true,
-			opacity: 0.8,
-			side: THREE.DoubleSide
+
+
+		var clock = new THREE.Clock(); //动画更新需要
+		var mixer; //动画更新需要
+
+		const clockDom = document.getElementById("clock")
+		const scoreDom = document.getElementById("score")
+		var ballFlag=0; // 限制连续点击
+		var shotNum = 0;// 打中了多少个
+		var ballNum = 0; // 用了多少颗子弹
+		var lastScore = 0;// 积分
+		var times = 30; // 倒计时多少秒
+		var timer = null;
+// 开始游戏
+		function startGame(){
+			isShowStartMask(0)
+			timer = setInterval(()=>{
+				times--;
+				clockDom.innerHTML=times;
+				if(times<=0){
+					overGame();
+					clearInterval(timer)
+				}
+			},1000)
+		}
+// 结束游戏
+		function overGame(){
+			document.getElementById("lastScore").innerHTML=lastScore;
+			isShowOverMask(1);
+		}
+// bye游戏
+		function returnGame(){
+			resetGame();
+			isShowOverMask(0);
+			isShowStartMask(1);
+		}
+// 重新游戏
+		function againGame(){
+			resetGame();
+			isShowOverMask(0);
+			startGame();
+		}
+// 重置游戏数据
+		function resetGame(){
+			// 重置数据
+			times=30;
+			lastScore=0;
+		    ballFlag=0;
+		    shotNum = 0;
+		    ballNum = 0;
+
+			// 重置画面
+			clockDom.innerHTML=times;
+			scoreDom.innerHTML=lastScore;
+			for(let i=0;i<20;i++){
+				if(onRenderFctsmy['selfAnim'+i]){
+					delete onRenderFctsmy['selfAnim'+i];
+					arWorldRoot.remove(targets[i]);
+				}
+			}
+			addTargets();		
+		}				
+// 是否显示开始界面
+		function isShowStartMask(f){
+			let maskDom = document.getElementById("readyMask");
+			if(f){
+				maskDom.style.display='block'
+			}else{
+				maskDom.style.display='none'
+			}
+		}
+
+// 是否显示结束界面
+		function isShowOverMask(f){
+			let maskDom = document.getElementById("overMask");
+			if(f){
+				maskDom.style.display='block'
+			}else{
+				maskDom.style.display='none'
+			}
+		}
+// 计分
+		function countScore(){
+			let s = shotNum*3 - ballNum;
+			if(s<0){
+				shotNum=0;
+				ballNum=0;
+				s=0;
+			}
+			lastScore=s;
+			scoreDom.innerHTML=lastScore;
+		}
+
+// ar元素控制
+// ==加载贴图和模型---------------------------------------------------------
+		var textureLoader = new THREE.TextureLoader();
+		// 雪人大炮材质
+		var gunUrl = "https://ued.united-imaging.com/doc_server/doc_server/resource/src/bdf1577230b2cffdd1f1e7aaed27cc8a.png";  // 节点服务器-模型图片
+		// var gunUrl = "https://ued.united-imaging.com/doc_server/doc_server/resource/src/8b4fe9749b44583a92cc324565e80b97.png";  // 节点服务器-模型图片
+		let gunTexture = textureLoader.load(gunUrl);
+		var gunMat= new THREE.MeshPhongMaterial({
+			transparent:true,
+			map:gunTexture,
+			normalMap:gunTexture,
+			bumpMap:gunTexture
 		});
+		var geometry2 = new THREE.BoxGeometry(0.5, 0.001, 0.8);
+		var gun = new THREE.Mesh(geometry2, gunMat);
+		gun.position.set(0,0.1,1.2);
+		arWorldRoot.add(gun);
+		// 横杠材质
+		var lineUrl = "https://ued.united-imaging.com/doc_server/doc_server/resource/src/45aa83dde7ebae5352bf548c59139801.png";  // 节点服务器-模型图片
+		let lineTexture = textureLoader.load(lineUrl);
+		var lineMat= new THREE.MeshPhongMaterial({
+			transparent:true,
+			map:lineTexture,
+			normalMap:lineTexture,
+			bumpMap:lineTexture
+		});
+		var geometry3 = new THREE.BoxGeometry(6, 0.001, 0.24);
+		var line = new THREE.Mesh(geometry3, lineMat);
+		line.position.set(0,0.15,-0.8);
+		arWorldRoot.add(line);
+		// 目标物材质
+		var targersUrl = [
+			"https://ued.united-imaging.com/doc_server/doc_server/resource/src/f96da7838618e32e4a3a0856d474ace6.png",
+			"https://ued.united-imaging.com/doc_server/doc_server/resource/src/b091212bebe411cf5067a01c70d98993.png",
+			"https://ued.united-imaging.com/doc_server/doc_server/resource/src/cec0ec1eb3ccf86597bd0cc2238684bd.png",
+			"https://ued.united-imaging.com/doc_server/doc_server/resource/src/294e45561d0ed3edc15700ce53d38b88.png",
+			"https://ued.united-imaging.com/doc_server/doc_server/resource/src/904e187c8285d60fc514aa8f302c59ef.png",
+			"https://ued.united-imaging.com/doc_server/doc_server/resource/src/a79533f1f95969ab45b41a8e95379977.png",
+			"https://ued.united-imaging.com/doc_server/doc_server/resource/src/d2f0566de3636f070b7691147ab7654d.png",
+			"https://ued.united-imaging.com/doc_server/doc_server/resource/src/166b9458119ca55a8f107d6be2f84669.png"]; // 节点服务器-模型图片
+
+		var matList = [];
+		var textureLoader = new THREE.TextureLoader();
+		targersUrl.forEach((item)=>{
+			let meshTexture = textureLoader.load(item);
+			// 注意：不能使用MeshBasicMaterial
+			matList.push(new THREE.MeshPhongMaterial({
+				transparent:true,
+				map:meshTexture,
+				normalMap:meshTexture,
+				bumpMap:meshTexture
+			}));
+		})
+		var geometry = new THREE.BoxGeometry(0.25, 0.001, 0.44);
 		var targets = [];
-		for(let i=0;i<5;i++){
-			let mesh = new THREE.Mesh(geometry, material);
-			mesh.position.set(-0.9+i*0.6,0.1,-0.6);
+		for(let i=0;i<20;i++){
+			let num = parseInt(Math.random()*5);
+			let mesh = new THREE.Mesh(geometry, matList[num]);
+			mesh.position.set(-6.6+i*0.6,0.1,-0.6);
 			targets.push(mesh);
 		}
-		
-		targets.forEach((item,i)=>{
-			arWorldRoot.add(item);
-			onRenderFctsmy['selfAnim'+i]=function () {
-				if(item.position.x>=2){
-					item.position.x = -2
+// ==加目标
+		function addTargets(){
+			targets.forEach((item,i)=>{
+				item.position.set(-6.6+i*0.6,0.1,-0.6); // 重置位置
+				arWorldRoot.add(item);
+				onRenderFctsmy['selfAnim'+i]=function () {
+					if(item.position.x>=6){
+						item.position.x = -6.6;
+					}
+					item.position.x += 0.025;
 				}
-				item.position.x += 0.05
-			}
-		})
+			})
+		}
+		addTargets();
 
-		var geometry2 = new THREE.BoxGeometry(0.1, 0.2, 0.1);
-		var gun = new THREE.Mesh(geometry2, material);
-		gun.position.set(0,0.1,1.2);
-		gun.rotation.x = (90 * Math.PI) / 180;
-		arWorldRoot.add(gun);
 
 
 // 碰撞检测
 		function hitTest(obj1,obj2){
-			// console.log(obj1.position);
-			// console.log(obj2.position);
 			if(obj1.position.y!=obj2.position.y)return false;
 			if(obj1.position.x<obj2.position.x+0.15 && obj1.position.x>obj2.position.x-0.15){
 				return true;
@@ -260,13 +513,18 @@
 			return false;
 		}
 // 射击
+
+		var ballMat = new THREE.MeshPhongMaterial( {
+			color: 0xffffff
+		});
 		function shot(){
 			if(ballFlag){return;}
-			// tan71.565°等于3。上下最大角度为75,左右最多45
-		    let geometry3 = new THREE.SphereGeometry(0.05);
-			let ball = new THREE.Mesh(geometry3, material);
-			ball.position.set(0,0.1,1.2);
+
+		    let geometry4 = new THREE.SphereGeometry(0.05);
+			let ball = new THREE.Mesh(geometry4, ballMat);
+			ball.position.set(gun.position.x,0.1,0.8);
 			arWorldRoot.add(ball);
+			ballNum+=1;countScore();
 			ballFlag=1;
 			let num = Math.random()*10000;
 			onRenderFctsmy['ballMove'+num]=function () {
@@ -279,14 +537,18 @@
 				}
 			}
 			onRenderFctsmy.isShot=function () {
-				if(ball.position.z <=-0.65){
+				if(ball.position.z <=-0.55){
 					targets.forEach((item,i)=>{
 						if(hitTest(ball,item)){
 							item.position.y=0.05;
+							shotNum+=1;countScore();
 							onRenderFctsmy['selfAnim'+i]=function (){
 								if(item.position.z>3){
 									delete onRenderFctsmy['selfAnim'+i]
-									arWorldRoot.remove(item)
+									arWorldRoot.remove(item);
+									if((shotNum % 20) == 0 ){
+										addTargets();
+									}
 									return;
 								}
 								item.position.z+=0.1;
@@ -297,9 +559,26 @@
 			}
 		}
 
+// 调整枪口
+		function rotateGun(num,type){
+			switch(type){
+				case 'left':
+					if(gun.position.x<=-0.6){
+						return;
+					}
+					gun.position.x-=num;
+					break;
+				case 'right':
+					if(gun.position.x>=0.6){
+						return;
+					}
+					gun.position.x+=num;
+					break;
+			}
+		}
 
 
-		// 光
+// 光
 		var ambient=new THREE.AmbientLight(0xffffff);
 		scene.add(ambient);
 
@@ -308,11 +587,16 @@
 		scene.add(directctionalLight);
 
 
+
+
+
+
+//===成像相关================================================================================================================
 		//////////////////////////////////////////////////////////////////////////////////
 		//		render the whole thing on the page
 		//////////////////////////////////////////////////////////////////////////////////
 		var stats = new Stats();
-		document.body.appendChild(stats.dom);
+		// document.body.appendChild(stats.dom);
 		// render the scene
 		onRenderFcts.push(function () {
 			// 更新动画帧
@@ -341,33 +625,7 @@
 			})
 
 		})
-
-		function changeAction(num){
-			mixer.clipAction(myobj.animations[whoAction]).stop();
-			mixer.clipAction(myobj.animations[num]).play();
-			whoAction=num;
-		}
-		function goback(){
-			myobj.scene.position.y-=1;
-		}
-// 调整枪口
-		function rotateGun(num,type){
-			switch(type){
-				case 'left':
-					if(gun.position.x<=-0.6){
-						return;
-					}
-					gun.position.x-=num;
-					break;
-				case 'right':
-					if(gun.position.x>=0.6){
-						return;
-					}
-					gun.position.x+=num;
-					break;
-			}
-		}
-
-		
+//###========================================================================================================================
+	
 	</script>
 </body>
