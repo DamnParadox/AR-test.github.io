@@ -10,9 +10,6 @@
 <script src="ar-threex.js"></script>
 <script>THREEx.ArToolkitContext.baseURL = '../'</script>
 
-<!-- 模型加载 -->
-<script src="vendor/three.js/GLTFLoader.js"></script>
-<script src="SVGLoader.js"></script>
 <style>
 	/* 成像位置 */
 	video{
@@ -157,9 +154,9 @@
 	<!-- ==底部 -->
 	<div class="footer bgimg">
 		<div class="down-con">
-			<button class="downBtn bgimg" style="background-image: url('./img/leftBtn.png');" onclick="rotateGun(0.1,'left')"></button>
+			<button class="downBtn bgimg" style="background-image: url('./img/leftBtn.png');" onclick="moveSnow(0.1,'left')"></button>
 			<button class="downBtn bgimg" style="background-image: url('./img/fire.png');" onclick="shot()"></button>
-			<button class="downBtn bgimg" style="background-image: url('./img/rightBtn.png');" onclick="rotateGun(0.1,'right')"></button>
+			<button class="downBtn bgimg" style="background-image: url('./img/rightBtn.png');" onclick="moveSnow(0.1,'right')"></button>
 		</div>
 	</div>
 	<!-- =2.2 ar建模元素 -->
@@ -468,7 +465,6 @@
 			"https://ued.united-imaging.com/doc_server/doc_server/resource/src/166b9458119ca55a8f107d6be2f84669.png"]; // 节点服务器-模型图片
 
 		var matList = [];
-		var textureLoader = new THREE.TextureLoader();
 		targersUrl.forEach((item)=>{
 			let meshTexture = textureLoader.load(item);
 			// 注意：不能使用MeshBasicMaterial
@@ -482,7 +478,7 @@
 		var geometry = new THREE.BoxGeometry(0.25, 0.001, 0.44);
 		var targets = [];
 		for(let i=0;i<20;i++){
-			let num = parseInt(Math.random()*5);
+			let num = parseInt(Math.random()*8);
 			let mesh = new THREE.Mesh(geometry, matList[num]);
 			mesh.position.set(-6.6+i*0.6,0.1,-0.6);
 			targets.push(mesh);
@@ -559,20 +555,18 @@
 			}
 		}
 
-// 调整枪口
-		function rotateGun(num,type){
+// 移动雪人
+		function moveSnow(num,type){
 			switch(type){
 				case 'left':
-					if(gun.position.x<=-0.6){
-						return;
+					if(gun.position.x>-0.6){
+						gun.position.x-=num;
 					}
-					gun.position.x-=num;
 					break;
 				case 'right':
-					if(gun.position.x>=0.6){
-						return;
+					if(gun.position.x<0.6){
+						gun.position.x+=num;
 					}
-					gun.position.x+=num;
 					break;
 			}
 		}
