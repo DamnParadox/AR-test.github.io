@@ -117,6 +117,36 @@
 	.again-btn{
 		left: 148px;
 	}
+	/* 倒计时5秒 */
+	.fivebox{
+		width: 100px;
+		height: 100px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+	}
+	#fivetime{
+		font-size: 48px;
+		font-weight: 900;
+		width: 100px;
+		line-height: 100px;
+		text-align: center;
+		font-family: Times;
+		opacity: 0.4;
+		display: none;
+	}
+	.snowbg{
+		width: 300px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+	}
 
 </style>
 <body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
@@ -136,6 +166,11 @@
 			<img class="again-btn" src="./img/again.png" onclick="againGame()"></img>
 		</div>
 	</div>
+	<!-- 4.倒计时5秒 -->
+	<div class="fivebox">
+		<p id="fivetime">5</p>
+	</div>
+	<img class="snowbg" src="./img/snow-bg.png">
 	<!-- 2.游戏界面 -->
 	<!-- =2.1 界面元素 -->
 	<!-- ==头部 -->
@@ -349,6 +384,10 @@
 			timer = setInterval(()=>{
 				times--;
 				clockDom.innerHTML=times;
+				if(times<=5){
+					document.getElementById("fivetime").innerHTML=times
+					document.getElementById("fivetime").style.display='block'
+				}
 				if(times<=0){
 					overGame();
 					clearInterval(timer)
@@ -357,6 +396,7 @@
 		}
 // 结束游戏
 		function overGame(){
+			document.getElementById("fivetime").style.display='none'
 			document.getElementById("lastScore").innerHTML=lastScore;
 			isShowOverMask(1);
 		}
