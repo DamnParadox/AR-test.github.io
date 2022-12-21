@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="author" content="uih-ued">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<title>圣诞游戏</title>
+<!-- three.js library -->
+<script src='vendor/three.js/build/three.min.js'></script>
+<script src="vendor/three.js/examples/js/libs/stats.min.js"></script>
+<!-- ar.js -->
+<script src="ar-threex.js"></script>
+<script>THREEx.ArToolkitContext.baseURL = '../'</script>
+
+<style>
+	/* 成像位置 */
+	video{
+		top:13% !important;
+		height: 73% !important;
+		overflow: hidden;
+	}
+	/* 作为背景 */
+	.bgimg{
+		background-repeat: no-repeat;background-position: center center;background-size: 100% 100%;
+	}
+	/* 顶部 */
+	.header{
+		position: absolute;left: 0px; top: 0px;width:100%;height: 13%;background-image: url('./img/top.png');overflow: hidden;display: flex;align-items: center;
+	}
+	.topInfo{
+		background-color: #EFA052;
+		border: 2px solid black;
+		border-radius: 40px;
+		width: 120px;
+		height: 40px;
+		display: flex;
+		align-items: center;
+	}
+	/* 顶部图标 */
+	.topicon{
+		height: 26px;
+		width: 22px;
+		margin-left: 22px;
+	}
+	/* 顶部文本 */
+	.toptext{
+		color: #2D2D2D;
+		font-weight: bold;
+		font-size: 24px;
+		margin-left: 10px;
+	}
+	/* 底部 */
+	.footer{
+		position: absolute;left: 0px; bottom: 0px;width:100%;height: 14%;background-image: url('./img/down.png');
+	}
+	.down-con{
+		margin: 0;height: 100%;width: 100%;display: flex;flex-direction: row;align-items: center;justify-content: space-evenly;
+	}
+	.downBtn{
+		background-color: transparent;border: 0px;width: 98px;height: 53px;
+	}
+	/* 遮罩 */
+	.mask{
+		height: 100vh;
+		width: 100vw;
+		position: absolute;
+		left: 0;
+		top: 0;
+		background-color: rgba(0, 0, 0, 0.3);
+		z-index: 9;
+	}
+	#over-mask-stock,#over-mask-snow{
+		display: none;
+	}
+	/* 弹窗 */
+	.tanchuang{
+		width: 275px;
+		height: 379px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+	}
+	.modelbg{
+		width: 100%;
+	}
+	/* 开始弹窗信息 */
+	.start-btn{
+		width: 215px;
+		height: 53px;
+		position: absolute;
+		bottom: 30px;
+		left: 30px;
+	}
+	/* 结束弹窗信息 */
+	.over-text{
+		width: 100%;
+		height: 43px;
+		position: absolute;
+		/* 雪人的需要修改 */
+		top: 230px;
+		left: 0;
+		text-align: center;
+		line-height: 43px;
+		font-size: 18px;
+	}
+	#last-score-stock{
+		font-size: 36px;
+		font-weight: bold;
+	}
+	.over-btn,.again-btn{
+		width: 98px;
+		height: 53px;
+		position: absolute;
+		bottom: 30px;
+		left: 30px;
+	}
+	.again-btn{
+		left: 148px;
+	}
+	/* 倒计时5秒 */
+	.fivebox{
+		width: 100px;
+		height: 100px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+	}
+	#fivetime-stock,#fivetime-snow{
+		font-size: 48px;
+		font-weight: 900;
+		width: 100px;
+		line-height: 100px;
+		text-align: center;
+		font-family: Times;
+		opacity: 0.6;
+		display: none;
+	}
+	.snowbg{
+		width: 300px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		margin: auto;
+	}
+
+
+
+	#snow-game,#stock-game{
+		display: none;
+		overflow: hidden;
+	}
+	
+	/* 结束弹窗信息 */
+	#snow-game .over-text{
+		top: 180px;
+	}
+
+
+</style>
+<body style='margin : 0px; overflow: hidden; font-family: Monospace;'>
+
+	<!-- 袜子游戏 -->
+	<div id="stock-game">
+		<!-- 1.开始界面 -->
+		<div id="ready-mask-stock" class="mask">
+			<div class="tanchuang">
+				<img class="modelbg" src="./img/startModelStock.png">
+				<img class="start-btn" src="./img/start-btn.png" onclick="startGameStock()"></img>
+			</div>
+		</div>
+		<!-- 3.结束界面 -->
+		<div id="over-mask-stock" class="mask">
+			<div class="tanchuang">
+				<img id="boombg" class="modelbg" src="./img/overModelStock1.png">
+				<div id="score-text-stock" class="over-text">袜子已经塞了 <span id="last-score-stock">0</span> 个礼物</div>
+				<img class="over-btn" src="./img/over.png" onclick="returnGameStock()"></img>
+				<img class="again-btn" src="./img/again.png" onclick="againGameStock()"></img>
+			</div>
+		</div>
+		<!-- 4.倒计时5秒 -->
+		<div class="fivebox">
+			<p id="fivetime-stock">5</p>
+		</div>
+		<img class="snowbg" src="./img/snow-bg.png">
+
+		<!-- 2.游戏界面 -->
+		<!-- =2.1 界面元素 -->
+		<!-- ==头部 -->
+		<div class="header bgimg">
+			<div style="width: 100%;height: 40px;">
+				<div class="topInfo" style="float: left;margin-left: 60px;">
+					<span><img class="topicon" src="./img/clock.png"></img></span>
+					<span id="clock-stock" class="toptext">30</span>
+				</div>
+				<div class="topInfo" style="float: right;margin-right: 60px;">
+					<span><img class="topicon" style="width: 26px;" src="./img/star.png"></img></span>
+					<span id="score-stock" class="toptext">0</span>
+				</div>
+			</div>
+		</div>
+		<!-- ==底部 -->
+		<div class="footer bgimg">
+			<div class="down-con">
+				<button id="leftBtn" onclick="moveWazi(0.1,'left')" class="downBtn bgimg" style="background-image: url('./img/leftBtn.png');"></button>
+				<button id="rightBtn" onclick="moveWazi(0.1,'right')" class="downBtn bgimg" style="background-image: url('./img/rightBtn.png');"></button>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 雪人游戏 -->
+	<div id="snow-game">
+		<!-- 1.开始界面 -->
+		<div id="ready-mask-snow" class="mask">
+			<div class="tanchuang">
+				<img class="modelbg" src="./img/startModelSnow.png">
+				<img class="start-btn" src="./img/start-btn.png" onclick="startGameSnow()"></img>
+			</div>
+		</div>
+		<!-- 3.结束界面 -->
+		<div id="over-mask-snow" class="mask">
+			<div class="tanchuang">
+				<img class="modelbg" src="./img/overModelSnow.png">
+				<div class="over-text">获得 <span id="last-score-snow">0</span> 分</div>
+				<img class="over-btn" src="./img/over.png" onclick="returnGameSnow()"></img>
+				<img class="again-btn" src="./img/again.png" onclick="againGameSnow()"></img>
+			</div>
+		</div>
+		<!-- 4.倒计时5秒 -->
+		<div class="fivebox">
+			<p id="fivetime-snow">5</p>
+		</div>
+		<img class="snowbg" src="./img/snow-bg.png">
+		<!-- 2.游戏界面 -->
+		<!-- =2.1 界面元素 -->
+		<!-- ==头部 -->
+		<div class="header bgimg">
+			<div style="width: 100%;height: 40px;">
+				<div class="topInfo" style="float: left;margin-left: 60px;">
+					<span><img class="topicon" src="./img/clock.png"></img></span>
+					<span id="clock-snow" class="toptext">30</span>
+				</div>
+				<div class="topInfo" style="float: right;margin-right: 60px;">
+					<span><img class="topicon" style="width: 26px;" src="./img/star.png"></img></span>
+					<span id="score-snow" class="toptext">0</span>
+				</div>
+			</div>
+		</div>
+		<!-- ==底部 -->
+		<div class="footer bgimg">
+			<div class="down-con">
+				<button class="downBtn bgimg" style="background-image: url('./img/leftBtn.png');" onclick="moveSnow(0.2,'left')"></button>
+				<button class="downBtn bgimg" style="background-image: url('./img/fire.png');" onclick="shotSnow()"></button>
+				<button class="downBtn bgimg" style="background-image: url('./img/rightBtn.png');" onclick="moveSnow(0.2,'right')"></button>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- =2.2 ar建模元素 -->
+	<!-- ==成像区 -->
+	<div id="armain-stock" style="position: absolute;left: 0px; top: 13%;width:100%;height: 73%;overflow: hidden;"></div>
+
+	<script src="PublicAR1.js"></script>
+	<script src="GeneralControl.js"></script>
+	<script src="snow.js"></script>
+	<script src="stock.js"></script>
+	<script src="PublicAR2.js"></script>
+</body>
